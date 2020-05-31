@@ -7,6 +7,9 @@ class RemoteCommand:
         self.cnx = conn
 
 
+    def run(self,cmd):
+        return self.cnx.run(cmd)
+
     def pwd(self):
         self.cnx.run('pwd')
 
