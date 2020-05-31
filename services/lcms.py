@@ -33,7 +33,8 @@ class LearningContentManagementSystem():
         """
 
         build = Build(  bash = self.bash, 
-                        code_dir = self.app['code_dir'], 
+                        src_dir = self.app['src_dir'], 
+                        build_dir = self.app['build_dir'], 
                         repo = self.app['repo'], 
                         branch = self.app['branch'],
                         owner = self.ssh.ssh_user)

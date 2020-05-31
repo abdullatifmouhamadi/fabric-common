@@ -1,6 +1,6 @@
 
 class Build:
-    def __init__(self, bash, code_dir, repo, branch, owner):
+    def __init__(self, bash, src_dir, build_dir,repo, branch, owner):
         """
         coucou
         """
@@ -8,7 +8,8 @@ class Build:
 
         self.git = {'repo':repo, 'branch':branch}
         self.bash = bash
-        self.codeDir = code_dir
+        self.srcDir = src_dir
+        self.buildDir = build_dir
         self.owner = owner
 
 
@@ -17,9 +18,10 @@ class Build:
         self.post_build()
 
     def pre_build(self):
-        self.bash.mkdir(self.codeDir)
+        self.bash.mkdir(self.srcDir)
+        self.bash.mkdir(self.buildDir)
         self.bash.chown(owner   = '{}:wheel'.format(self.owner), 
-                        pattern = self.codeDir)
+                        pattern = self.srcDir)
 
     def post_build(self):
         b=0
@@ -27,10 +29,10 @@ class Build:
 
     def setup_git_env(self):
         print("\n\n==> setup_git_env\n\n")
-        if  not self.bash.directory_exists(self.codeDir + '/.git'):
+        if  not self.bash.directory_exists(self.srcDir + '/.git'):
             self.bash.clone(branch  = self.git['branch'], 
                             repo    = self.git['repo'], 
-                            pattern = self.codeDir)
+                            pattern = self.srcDir)
                         
         result = self.bash.reset(branch  = self.git['branch'], 
-                               pattern = self.codeDir)
+                               pattern = self.srcDir)
