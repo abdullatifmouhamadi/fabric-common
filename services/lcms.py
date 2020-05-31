@@ -30,9 +30,13 @@ class LearningContentManagementSystem():
     def setup(self):
         DISCIPLINE_DIR = self.app['build_dir'] + '/' + self.discipline
         CATEGORY_DIR   = DISCIPLINE_DIR + '/' + self.category
+        ID_DIR         = CATEGORY_DIR + '/' + self.id
 
         self.bash.mkdir(DISCIPLINE_DIR)
         self.bash.mkdir(CATEGORY_DIR)
+        self.bash.mkdir(ID_DIR)
+        
+
         
 
 
