@@ -22,21 +22,27 @@ class LearningContentManagementSystem():
         ##
         self.latex = Latex(ssh=ssh)
 
+
+
+
+        ## DIRS
+        self.disciplineDir = self.app['build_dir'] + '/' + self.discipline
+        self.categoryDir   = self.disciplineDir + '/' + self.category
+        self.idDir         = self.categoryDir + '/' + self.id
+
+
         ##
         self.setup()
 
 
 
     def setup(self):
-        DISCIPLINE_DIR = self.app['build_dir'] + '/' + self.discipline
-        CATEGORY_DIR   = DISCIPLINE_DIR + '/' + self.category
-        ID_DIR         = CATEGORY_DIR + '/' + self.id
 
-        self.bash.mkdir(DISCIPLINE_DIR)
-        self.bash.mkdir(CATEGORY_DIR)
+        self.bash.mkdir(self.disciplineDir)
+        self.bash.mkdir(self.categoryDir)
 
-        self.bash.remove(ID_DIR)
-        self.bash.mkdir(ID_DIR)
+        self.bash.remove(self.idDir)
+        self.bash.mkdir(self.idDir)
         
 
     
