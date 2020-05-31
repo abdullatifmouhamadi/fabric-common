@@ -1,4 +1,4 @@
-
+from patchwork.files import directory, exists
 
 
 
@@ -77,6 +77,10 @@ class RemoteCommand:
         except:
             return False
         return False
+
+
+    #def exists(self, path):
+    #    return exists(self.cnx, path)
 
 
     def daemonreload(self):
