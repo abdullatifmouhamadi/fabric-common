@@ -7,11 +7,19 @@ class Latex:
         self.bash = ssh.bash
 
 
-        self.compiler = 'pdflatex'
+    # https://github.com/James-Yu/LaTeX-Workshop/wiki/Compile#latex-recipe
+    #pdflatex -> bibtex -> pdflatex X 2
 
-    def compile(self, path,src):
+    # Recipe step 1
+    # 
+    def compile(self, path, src):
         try:
-            r = self.bash.run('cd {} && {} {}'.format(path, self.compiler, src))
+
+            r = self.bash.run('cd {} && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf {}.tex -outdir="."'.format(path, src))
+            #r = self.bash.run('cd {} && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -g {}.tex -outdir="."'.format(path, src)) force 'g' parma
+            #r = self.bash.run('cd {} && bibtex {}'.format(path, src))
+            #r = self.bash.run('cd {} && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error {}'.format(path, src))
+            #r = self.bash.run('cd {} && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error {}'.format(path, src))
             return r
         except:
             print("PDFLATEX ERROR")

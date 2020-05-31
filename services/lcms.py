@@ -34,13 +34,19 @@ class LearningContentManagementSystem():
 
         self.bash.mkdir(DISCIPLINE_DIR)
         self.bash.mkdir(CATEGORY_DIR)
+
+        self.bash.remove(ID_DIR)
         self.bash.mkdir(ID_DIR)
         
 
-        
+    
+    
 
 
     def compile(self, src):
+
+
+
         return self.latex.compile(path = self.app['src_dir'], src=src)
 
 
