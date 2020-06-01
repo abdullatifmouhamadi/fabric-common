@@ -47,7 +47,7 @@ class RemoteCommand:
     def chmod(self, permissions, pattern):
         self.cnx.sudo('chmod {} {}'.format(permissions, pattern))
 
-    def sed(self, pattern, old, new):
+    def replace(self, pattern, old, new):
         self.cnx.sudo("sed -i 's/{}/{}/g' {}".format(old, new, pattern))
 
     def copy(self, src, target):
