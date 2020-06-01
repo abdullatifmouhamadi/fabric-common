@@ -106,3 +106,12 @@ class RemoteCommand:
         except:
             return False
         return False
+
+    # https://stackoverflow.com/questions/14352290/listing-only-directories-using-ls-in-bash
+    def list_dir(self, pattern):
+        """returns a list of files in a directory (dir_) as absolute paths"""
+        result = self.cnx.run('cd %s && for i in $(ls -d */); do echo ${i%%/}; done' % pattern)
+        string_ = result.stdout.strip()
+        dirs = string_.replace("\r","").split("\n")
+        return dirs
+        
