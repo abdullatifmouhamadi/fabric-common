@@ -2,6 +2,9 @@
 
 from ..common.build import Build
 from ..core.latex import Latex
+from ..core.csv_simple import CSVSimple
+
+
 
 class LearningContentManagementSystem():
     def __init__(self, ssh, app, discipline, category, id):
@@ -50,9 +53,6 @@ class LearningContentManagementSystem():
 
 
     def compile(self, src):
-
-
-
         return self.latex.compile(path = self.app['src_dir'], src=src)
 
 
@@ -61,15 +61,12 @@ class LearningContentManagementSystem():
         """
             préeliminaires
         """
-
         build = Build(bash      = self.bash, 
                       src_dir   = self.app['src_dir'], 
                       build_dir = self.app['build_dir'], 
                       repo      = self.app['repo'], 
                       branch    = self.app['branch'],
                       owner     = self.ssh.ssh_user)
-
-
         #self.bash.pwd()
         #self.bash.directory_exists(pattern='/d')
 
@@ -77,3 +74,10 @@ class LearningContentManagementSystem():
 
 
 
+    def process_pedagogie(self, path):
+        obj = CSVSimple(path)
+        for index, row in obj.pd.iterrows():
+            print(row['module_dossier'])
+
+
+        return obj

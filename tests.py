@@ -17,10 +17,9 @@ def csv_test():
     #obj.pd['module_dossier'] = obj.pd['module_dossier'].astype(str)
     #obj.pd = obj.pd.applymap(str)
     for index, row in obj.pd.iterrows():
-
-        
-
-      print(row['module_dossier'])
+      print( type(row['module_dossier']))
+      #if row['module_dossier'].isnull():
+      #  print("nand")
 
 
 
