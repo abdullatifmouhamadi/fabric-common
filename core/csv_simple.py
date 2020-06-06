@@ -5,7 +5,7 @@ import pandas as pd
 class CSVSimple:
   def __init__(self, path):
     self.path = path
-    self.pd   = pd.read_csv(self.path, sep=';', index_col=0)
+    self.pd   = pd.read_csv(self.path, sep=';', index_col="index")
 
 
   def test(self):

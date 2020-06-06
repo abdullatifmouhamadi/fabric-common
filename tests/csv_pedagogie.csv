@@ -1,27 +1,27 @@
-index;module_dossier;module_titre;module_slogan;module_objectif_professionnel;module_objectif_examen;module_template_prerequis;module_template_pedagogie;module_template_conducteur;module_template_poster;sequence_titre;sequence_objectif;sequence_taxonomie;sequence_duree_theorie;sequence_duree_pratique;sequence_extrait_referentiel
-1;'7';Analyse des signaux;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;1;Analyse temporelle des signaux;bloomObj;1;30;60;extraitReferentielA
-2;;;;;;;;;;Analyse fréquentielle des signaux;bloomObj;1;30;60;extraitReferentielA
-1;'14';Systèmes linéaires;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;1;Modélisation des systèmes linéaires;bloomObj;2;30;60;extraitReferentielA
-2;;;;;;;;;;Circuits linéaires en régime sinusoïdal;bloomObj;3;30;60;extraitReferentielA
-3;;;;;;;;;;Réponse temporelle d’un système linéaire;bloomObj;1;30;60;extraitReferentielA
-4;;;;;;;;;;Réponse fréquentielle d’un système linéaire;bloomObj;1;30;60;extraitReferentielA
-1;'15';Traitement analogique du signal;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;1;Amplification;bloomObj;2;30;60;extraitReferentielA
-2;;;;;;;;;;Filtrage analogique;bloomObj;3;30;60;extraitReferentielA
-3;;;;;;;;;;Les signaux aléatoires : bruit et rapport signal sur bruit;bloomObj;3;30;60;extraitReferentielA
-4;;;;;;;;;;Numérisation des signaux analogiques et restitution;bloomObj;1;30;60;extraitReferentielA
-1;'17';Composants optoelectroniques $\&$ lignes de transmissions;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;1;Ondes mécaniques;bloomObj;2;30;60;extraitReferentielA
-2;;;;;;;;;;Ondes électromagnétiques;bloomObj;3;30;60;extraitReferentielA
-3;;;;;;;;;;Les lignes de transmissions;bloomObj;1;30;60;extraitReferentielA
-4;;;;;;;;;;Composants optoélectroniques et fibres optiques;bloomObj;1;30;60;extraitReferentielA
-1;'18';Traitement numérique du signal;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;1;Chaîne de traitement num. et fonctions de transfert échantillonnées;bloomObj;2;30;60;extraitReferentielA
-2;;;;;;;;;;Filtres numériques;bloomObj;3;30;60;extraitReferentielA
-1;'19';Transmissions analogique et numérique $\&$ Antennes;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;1;Transmissions analogiques sur fréquence porteuse;bloomObj;1;30;60;extraitReferentielA
-2;;;;;;;;;;Transmissions numériques en bande de base;bloomObj;1;30;60;extraitReferentielA
-3;;;;;;;;;;Transmissions numériques sur fréquence porteuse numérique;bloomObj;2;30;60;extraitReferentielA
-4;;;;;;;;;;Antennes;bloomObj;3;30;60;extraitReferentielA
-1;'20';Colorimétrie et images numériques;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;1;La colorimétrie de l’oeil;bloomObj;3;30;60;extraitReferentielA
-2;;;;;;;;;;Images numériques;bloomObj;1;30;60;extraitReferentielA
-1;'21';Oscillateurs $\&$ systèmes asservis;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;1;Production de signaux;bloomObj;2;30;60;extraitReferentielA
-2;;;;;;;;;;Structure des asservissements linéaires;bloomObj;3;30;60;extraitReferentielA
-3;;;;;;;;;;Performances des asservissements linéaires;bloomObj;4;30;60;extraitReferentielA
-4;;;;;;;;;;Systèmes asservis numériques;bloomObj;4;30;60;extraitReferentielA
+index;group;module_dossier;module_titre;module_slogan;module_objectif_professionnel;module_objectif_examen;module_template_prerequis;module_template_pedagogie;module_template_conducteur;module_template_poster;sequence_titre;sequence_objectif;sequence_taxonomie;sequence_duree_theorie;sequence_duree_pratique;sequence_template_referentiel
+1;1;'7';Analyse des signaux;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;'1';Analyse temporelle des signaux;bloomObj;1;30;60;extraitReferentielA
+2;1;;;;;;;;;;Analyse fréquentielle des signaux;bloomObj;1;30;60;extraitReferentielA
+3;2;'14';Systèmes linéaires;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;'1';Modélisation des systèmes linéaires;bloomObj;2;30;60;extraitReferentielA
+4;2;;;;;;;;;;Circuits linéaires en régime sinusoïdal;bloomObj;3;30;60;extraitReferentielA
+5;2;;;;;;;;;;Réponse temporelle d’un système linéaire;bloomObj;1;30;60;extraitReferentielA
+6;2;;;;;;;;;;Réponse fréquentielle d’un système linéaire;bloomObj;1;30;60;extraitReferentielA
+7;3;'15';Traitement analogique du signal;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;'1';Amplification;bloomObj;2;30;60;extraitReferentielA
+8;3;;;;;;;;;;Filtrage analogique;bloomObj;3;30;60;extraitReferentielA
+9;3;;;;;;;;;;Les signaux aléatoires : bruit et rapport signal sur bruit;bloomObj;3;30;60;extraitReferentielA
+10;3;;;;;;;;;;Numérisation des signaux analogiques et restitution;bloomObj;1;30;60;extraitReferentielA
+11;4;'17';Composants optoelectroniques $\&$ lignes de transmissions;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;'1';Ondes mécaniques;bloomObj;2;30;60;extraitReferentielA
+12;4;;;;;;;;;;Ondes électromagnétiques;bloomObj;3;30;60;extraitReferentielA
+13;4;;;;;;;;;;Les lignes de transmissions;bloomObj;1;30;60;extraitReferentielA
+14;4;;;;;;;;;;Composants optoélectroniques et fibres optiques;bloomObj;1;30;60;extraitReferentielA
+15;5;'18';Traitement numérique du signal;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;'1';Chaîne de traitement num. et fonctions de transfert échantillonnées;bloomObj;2;30;60;extraitReferentielA
+16;5;;;;;;;;;;Filtres numériques;bloomObj;3;30;60;extraitReferentielA
+17;6;'19';Transmissions analogique et numérique $\&$ Antennes;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;'1';Transmissions analogiques sur fréquence porteuse;bloomObj;1;30;60;extraitReferentielA
+18;6;;;;;;;;;;Transmissions numériques en bande de base;bloomObj;1;30;60;extraitReferentielA
+19;6;;;;;;;;;;Transmissions numériques sur fréquence porteuse numérique;bloomObj;2;30;60;extraitReferentielA
+20;6;;;;;;;;;;Antennes;bloomObj;3;30;60;extraitReferentielA
+21;7;'20';Colorimétrie et images numériques;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;'1';La colorimétrie de l’oeil;bloomObj;3;30;60;extraitReferentielA
+22;7;;;;;;;;;;Images numériques;bloomObj;1;30;60;extraitReferentielA
+23;8;'21';Oscillateurs $\&$ systèmes asservis;slogan;obj_pro;obj_exam;prerequisA;pedagogieA;conducteurA;'1';Production de signaux;bloomObj;2;30;60;extraitReferentielA
+24;8;;;;;;;;;;Structure des asservissements linéaires;bloomObj;3;30;60;extraitReferentielA
+25;8;;;;;;;;;;Performances des asservissements linéaires;bloomObj;4;30;60;extraitReferentielA
+26;8;;;;;;;;;;Systèmes asservis numériques;bloomObj;4;30;60;extraitReferentielA
