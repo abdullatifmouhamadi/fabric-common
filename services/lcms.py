@@ -3,6 +3,9 @@
 from ..common.build import Build
 from ..core.latex import Latex
 from ..core.csv_simple import CSVSimple
+from pprint import pprint
+from pandas import DataFrame
+import pandas as pd
 
 
 
@@ -26,13 +29,14 @@ class LearningContentManagementSystem():
         self.latex = Latex(ssh=ssh)
 
 
-
-
         ## DIRS
         self.disciplineDir = self.app['build_dir'] + '/' + self.discipline
         self.categoryDir   = self.disciplineDir + '/' + self.category
         self.idDir         = self.categoryDir + '/' + self.id
 
+
+        ## PEDAGOGIE PARSING
+        self.pedagogies = None
 
         ##
         self.setup()
@@ -72,6 +76,63 @@ class LearningContentManagementSystem():
 
 
 
+    def get_pedagogie_module(self, module_dossier):
+        for pedagogie in self.pedagogies:
+            if pedagogie['module_dossier'] == module_dossier:
+                return pedagogie
+        return None
+
+
+
+
+    def process_duree_totale(self, module_dossier):
+        pedagogie            = self.get_pedagogie_module(module_dossier = module_dossier)
+        sequences            = pedagogie['sequences'] 
+        total_duree_theorie  = 0
+        total_duree_pratique = 0
+        for sequence in sequences:
+            total_duree_theorie += int(sequence['sequence_duree_theorie'])
+            total_duree_pratique += int(sequence['sequence_duree_pratique'])
+        return total_duree_theorie + total_duree_pratique
+
+
+
+    def generate_sequence_list(self, module_dossier, output):
+        pedagogie            = self.get_pedagogie_module(module_dossier = module_dossier)
+        sequences            = pedagogie['sequences']
+        csv                  = []
+        pos                  = 0
+        total_duree_theorie  = 0
+        total_duree_pratique = 0
+
+        csv.append({
+            'col0':'#',
+            'col1':'Titre de la sequence',
+            'col2':'theorie',
+            'col3':'pratique',
+        })
+        for sequence in sequences:
+            pos = pos + 1
+            csv.append({
+                'col0':pos,
+                'col1':str(sequence['sequence_titre']),
+                'col2':str(sequence['sequence_duree_theorie']) +' min',
+                'col3':str(sequence['sequence_duree_pratique']) +' min',
+            })
+            total_duree_theorie += int(sequence['sequence_duree_theorie'])
+            total_duree_pratique += int(sequence['sequence_duree_pratique'])
+
+        csv.append({
+            'col0':"-",
+            'col1':"\\bfseries Total",
+            'col2':"\\bfseries "+str(total_duree_theorie) +' min',
+            'col3':"\\bfseries "+str(total_duree_pratique) +' min',
+        })
+        df = pd.DataFrame(csv)
+        df.to_csv( output , index = False, sep=';', header=False)
+
+
+
 
 
     def parse_pedagogie(self, path):
@@ -80,7 +141,7 @@ class LearningContentManagementSystem():
 
         row_count   = sum(1 for row in data.iterrows())
         max_group   = max(data['group'])
-        pedagogies  = []
+        self.pedagogies  = []
         modules     = {}
         sequences   = []
         
@@ -112,7 +173,7 @@ class LearningContentManagementSystem():
                     })
             if len(modules)>0:
                 modules['sequences']=sequences
-                pedagogies.append(modules)
+                self.pedagogies.append(modules)
                 #pprint(modules)
             
-        return pedagogies
+        return self.pedagogies
