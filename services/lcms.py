@@ -6,6 +6,8 @@ from ..core.csv_simple import CSVSimple
 from pprint import pprint
 from pandas import DataFrame
 import pandas as pd
+import time 
+
 
 
 
@@ -96,6 +98,54 @@ class LearningContentManagementSystem():
         return total_duree_theorie + total_duree_pratique
 
 
+    def formatTime(self, seconds): 
+        min, sec = divmod(seconds, 60) 
+        hour, min = divmod(min, 60) 
+        return "%dh%02d" % (hour, min) # "%d:%02d:%02d" % (hour, min, sec) 
+
+    def generate_suivi_pedagogique_list(self, output):
+        csv                  = []
+        pos                  = 0
+        total_duree_theorie  = 0
+        total_duree_pratique = 0
+        csv.append({
+            'col0':'#',
+            'col1':'module',
+            'col2':'sequence',
+            'col3':'taxonomie',
+            'col4':'theorie',
+            'col5':'pratique',
+        })
+        for pedagogie in self.pedagogies:
+            sequences = pedagogie['sequences']
+            for sequence in sequences:
+                pos = pos + 1
+                csv.append({
+                    'col0':pos,
+                    'col1':str(pedagogie['module_titre']),
+                    'col2':str(sequence['sequence_titre']),
+                    'col3':str(sequence['sequence_taxonomie']),
+                    'col4':str(sequence['sequence_duree_theorie']) +'min',
+                    'col5':str(sequence['sequence_duree_pratique']) +'min',
+                })
+                total_duree_theorie += int(sequence['sequence_duree_theorie'])
+                total_duree_pratique += int(sequence['sequence_duree_pratique'])
+
+        #pprint(self.formatTime(total_duree_pratique * 60))
+
+        csv.append({
+            'col0':"-",
+            'col1':"\\bfseries Total",
+            'col2':"-",
+            'col3':"-",
+            'col4':"\\bfseries " + self.formatTime(total_duree_theorie * 60),
+            'col5':"\\bfseries " + self.formatTime(total_duree_pratique * 60),
+        })
+        df = pd.DataFrame(csv)
+        df.to_csv( output , index = False, sep=',', header=False)
+        return None
+
+
 
     def generate_sequence_list(self, module_dossier, output):
         pedagogie            = self.get_pedagogie_module(module_dossier = module_dossier)
@@ -116,8 +166,8 @@ class LearningContentManagementSystem():
             csv.append({
                 'col0':pos,
                 'col1':str(sequence['sequence_titre']),
-                'col2':str(sequence['sequence_duree_theorie']) +' min',
-                'col3':str(sequence['sequence_duree_pratique']) +' min',
+                'col2':str(sequence['sequence_duree_theorie']) +'min',
+                'col3':str(sequence['sequence_duree_pratique']) +'min',
             })
             total_duree_theorie += int(sequence['sequence_duree_theorie'])
             total_duree_pratique += int(sequence['sequence_duree_pratique'])
@@ -125,8 +175,8 @@ class LearningContentManagementSystem():
         csv.append({
             'col0':"-",
             'col1':"\\bfseries Total",
-            'col2':"\\bfseries "+str(total_duree_theorie) +' min',
-            'col3':"\\bfseries "+str(total_duree_pratique) +' min',
+            'col2':"\\bfseries " + self.formatTime(total_duree_theorie * 60),
+            'col3':"\\bfseries " + self.formatTime(total_duree_pratique * 60),
         })
         df = pd.DataFrame(csv)
         df.to_csv( output , index = False, sep=';', header=False)
