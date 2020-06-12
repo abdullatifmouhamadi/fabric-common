@@ -85,6 +85,16 @@ class LearningContentManagementSystem():
         return None
 
 
+    def get_pedagogie_group(self, group):
+        for pedagogie in self.pedagogies:
+            pprint(group)
+            if pedagogie['group'] == int(group):
+                return pedagogie
+        return None
+
+
+    
+
 
 
     def process_duree_totale(self, module_dossier):
@@ -186,14 +196,14 @@ class LearningContentManagementSystem():
 
 
     def parse_pedagogie(self, path):
-        obj         = CSVSimple(path=path)
-        data        = obj.pd
+        obj              = CSVSimple(path=path)
+        data             = obj.pd
 
-        row_count   = sum(1 for row in data.iterrows())
-        max_group   = max(data['group'])
+        row_count        = sum(1 for row in data.iterrows())
+        max_group        = max(data['group'])
         self.pedagogies  = []
-        modules     = {}
-        sequences   = []
+        modules          = {}
+        sequences        = []
         
         for group in range(max_group+1):
             modules = {}
@@ -203,6 +213,7 @@ class LearningContentManagementSystem():
                 if group == row['group']:
                     if isinstance(row['module_dossier'], str):
                         modules = {
+                        'group':row['group'],
                         'module_dossier':row['module_dossier'].replace("'",""),
                         'module_titre':row['module_titre'],
                         'module_slogan':row['module_slogan'],
@@ -227,3 +238,6 @@ class LearningContentManagementSystem():
                 #pprint(modules)
             
         return self.pedagogies
+
+
+    
