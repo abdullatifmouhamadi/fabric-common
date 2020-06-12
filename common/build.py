@@ -27,7 +27,7 @@ class Build:
 
     def setup_git_env(self):
         print("\n\n==> setup_git_env\n\n")
-        """
+        #"""
         if  not self.bash.directory_exists(self.srcDir + '/.git'):
             self.bash.clone(branch  = self.git['branch'], 
                             repo    = self.git['repo'], 
@@ -35,4 +35,4 @@ class Build:
                         
         result = self.bash.reset(branch  = self.git['branch'], 
                                pattern = self.srcDir)
-        """
+        #"""

@@ -87,13 +87,12 @@ class LearningContentManagementSystem():
 
     def get_pedagogie_group(self, group):
         for pedagogie in self.pedagogies:
-            pprint(group)
             if pedagogie['group'] == int(group):
                 return pedagogie
         return None
 
 
-    
+
 
 
 
@@ -215,6 +214,7 @@ class LearningContentManagementSystem():
                         modules = {
                         'group':row['group'],
                         'module_dossier':row['module_dossier'].replace("'",""),
+                        'chapitres_dossiers':row['chapitres_dossiers'],
                         'module_titre':row['module_titre'],
                         'module_slogan':row['module_slogan'],
                         'module_objectif_professionnel':row['module_objectif_professionnel'],
