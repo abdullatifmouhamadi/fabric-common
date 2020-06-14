@@ -4,15 +4,16 @@ class Build:
         """
         Build construct
         """
-        self.git = {'repo':repo, 'branch':branch}
-        self.bash = bash
-        self.srcDir = src_dir
+        self.git      = {'repo':repo, 'branch':branch}
+        self.bash     = bash
+        self.srcDir   = src_dir
         self.buildDir = build_dir
-        self.owner = owner
+        self.owner    = owner
 
 
         self.pre_build()
-        self.setup_git_env()
+        if self.git['repo'] != 'none':
+            self.setup_git_env()
         self.post_build()
 
     def pre_build(self):

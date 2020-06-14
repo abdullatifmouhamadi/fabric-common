@@ -115,3 +115,10 @@ class RemoteCommand:
         dirs = string_.replace("\r","").split("\n")
         return dirs
         
+
+
+    def download(self, pattern, dlink):
+        self.cnx.run('cd {} && wget --no-clobber {}'.format( pattern, dlink ))
+
+
+
