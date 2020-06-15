@@ -10,6 +10,9 @@ class RemoteCommand:
     def run(self,cmd):
         return self.cnx.run(cmd)
 
+    def sudo(self, cmd):
+        return self.cnx.sudo(cmd)
+
     def pwd(self):
         self.cnx.run('pwd')
 
