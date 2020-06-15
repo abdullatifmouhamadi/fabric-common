@@ -36,7 +36,6 @@ class Device:
         self.bash.sudo('fallocate -l {} {}/{}'.format(size, path, name))
 
 
-
         """
         result           = self.bash.sudo('losetup --find --show {}/{}'.format(path, name))
         self.loopbackdev = result.stdout.strip()
@@ -72,6 +71,14 @@ class Device:
 
 
 
+        # Clean
+        self.bash.sudo("umount -l {}/mnt/boot || /bin/true".format(path))
+        self.bash.sudo("umount -l {}/mnt || /bin/true".format(path))
+        
+        self.bash.sudo('losetup --detach "{}"'.format(self.loopbackdev))
+
+
+
     def bind_filesystem(self, path, name):
         if self.loopbackdev == None:
             result           = self.bash.sudo('losetup --find --show {}/{}'.format(path, name))
@@ -94,11 +101,15 @@ class Device:
 
     def pre_chroot(self, path, name):
 
-        if not self.mounted(path=path):
-            device = self.bind_filesystem(path=path, name=name)
-            self.mount_image(device=device, path=path)
-            #print("imageALREADY MOUNTED")
-            #return False
+        if self.mounted(path=path):
+            print("imageALREADY MOUNTED")
+            return False
+
+
+        device = self.bind_filesystem(path=path, name=name)
+        self.mount_image(device=device, path=path)
+        #print("imageALREADY MOUNTED")
+        #return False
         
 
         self.bash.sudo("mount -t proc none {}/mnt/proc || /bin/true".format(path))
@@ -111,9 +122,13 @@ class Device:
 
 
 
+
+
+
+
     def mounted(self, path):
         result = self.bash.sudo('mountpoint -q %s/mnt && echo "mounted" || echo "not mounted"' % path)
-        if result == "mounted":
+        if result.stdout.strip() == "mounted":
             return True
         else:
             return False
@@ -128,19 +143,20 @@ class Device:
         self.bash.sudo("rm {}/mnt/usr/bin/qemu-arm-static || /bin/true".format(path))
 
 
-        self.bash.sudo("umount {}/mnt/dev || /bin/true".format(path))
-        self.bash.sudo("umount {}/mnt/proc || /bin/true".format(path))
-        self.bash.sudo("umount {}/mnt/sys || /bin/true".format(path))
+        self.bash.sudo("umount -l {}/mnt/dev || /bin/true".format(path))
+        self.bash.sudo("umount -l {}/mnt/proc || /bin/true".format(path))
+        self.bash.sudo("umount -l {}/mnt/sys || /bin/true".format(path))
 
 
-        self.bash.sudo("umount {}/mnt/boot || /bin/true".format(path))
-        self.bash.sudo("umount {}/mnt || /bin/true".format(path))
+        self.bash.sudo("umount -l {}/mnt/boot || /bin/true".format(path))
+        self.bash.sudo("umount -l {}/mnt || /bin/true".format(path))
 
 
     def post_build(self):
         """
             Cleaning Up
         """
+        self.umount(path=self.installDir)
         if self.loopbackdev:
             self.bash.sudo('losetup --detach "{}"'.format(self.loopbackdev))
         #print("result '%s'" % self.loopbackdev)
