@@ -121,7 +121,7 @@ class RemoteCommand:
 
 
     def download(self, pattern, dlink):
-        self.cnx.run('cd {} && wget --no-clobber {}'.format( pattern, dlink ))
+        self.cnx.sudo('wget -P {} --no-clobber {}'.format( pattern, dlink ))
 
 
 

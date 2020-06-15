@@ -20,18 +20,29 @@ class Device:
 
     def pre_build(self):
         self.bash.mkdir(self.installDir)
-        self.bash.chown(owner   = '{}:wheel'.format(self.ssh.ssh_user), pattern = self.installDir)
+        #self.bash.chown(owner   = '{}:wheel'.format(self.ssh.ssh_user), pattern = self.installDir)
 
 
     #https://disconnected.systems/blog/raspberry-pi-archlinuxarm-setup/
     def create_image_file(self, name, size, path):
 
+        if self.bash.file_exists(pattern="{}/{}".format(path, name)):
+            print("imageALREADY EXISTS")
+            return False
+
         # Create an image file
         self.bash.remove("{}/{}".format(path, name))
+
         self.bash.run('cd {} && fallocate -l {} "{}"'.format(path, size, name))
 
+
+
+        """
         result           = self.bash.sudo('losetup --find --show {}/{}'.format(path, name))
         self.loopbackdev = result.stdout.strip()
+        """
+        self.bind_filesystem(path = path, name = name)
+
 
         # Format and mount the device
         p1 = self.loopbackdev+'p1'
@@ -46,30 +57,91 @@ class Device:
         self.bash.sudo("mkfs.vfat -F32 %s" % p1)
         self.bash.sudo("mkfs.ext4 -F %s" % p2)
 
+        """
+        self.bash.sudo("mkdir -p %s/mnt" % path)
 
-        self.bash.sudo("mkdir -p %s/mnt" % self.installDir)
-
-        self.bash.sudo("mount {} {}/mnt".format(p2, self.installDir))
-        self.bash.sudo("mkdir %s/mnt/boot" % self.installDir)
-        self.bash.sudo("mount {} {}/mnt/boot".format(p1, self.installDir))
-
+        self.bash.sudo("mount {} {}/mnt".format(p2, path))
+        self.bash.sudo("mkdir %s/mnt/boot" % path)
+        self.bash.sudo("mount {} {}/mnt/boot".format(p1, path))
+        """
+        self.mount_image(device = self.loopbackdev, path = path)
 
         # Install the base system
 
+        self.bash.sudo('bsdtar -xpf {}/ArchLinuxARM-rpi-2-latest.tar.gz -C {}/mnt'.format(path, path) )
 
 
 
+    def bind_filesystem(self, path, name):
+        result           = self.bash.sudo('losetup --find --show {}/{}'.format(path, name))
+        self.loopbackdev = result.stdout.strip()
+        return self.loopbackdev
 
 
 
+    def mount_image(self, device, path):
+        p1 = device + 'p1'
+        p2 = device + 'p2'
+
+        self.bash.sudo("mkdir -p %s/mnt" % path)
+
+        self.bash.sudo("mount {} {}/mnt".format(p2, path))
+        self.bash.sudo("mkdir -p %s/mnt/boot" % path)
+        self.bash.sudo("mount {} {}/mnt/boot".format(p1, path))
+
+
+    def pre_chroot(self, path, name):
+
+        if self.mounted(path=path):
+            print("imageALREADY MOUNTED")
+            return False
+
+        device = self.bind_filesystem(path=path, name=name)
+
+        self.mount_image(device=device, path=path)
+
+        self.bash.sudo("mount -t proc none {}/mnt/proc".format(path))
+        self.bash.sudo("mount -t sysfs none {}/mnt/sys".format(path))
+        self.bash.sudo("mount -o bind /dev {}/mnt/dev".format(path))
+
+        self.bash.sudo("mv {}/mnt/etc/resolv.conf {}/mnt/etc/resolv.conf.bak".format(path, path))
+        self.bash.sudo("cp /etc/resolv.conf {}/mnt/etc/resolv.conf".format(path))
+        self.bash.sudo("cp /usr/bin/qemu-arm-static {}/mnt/usr/bin/".format(path))
+
+
+
+    def mounted(self, path):
+        result = self.bash.sudo('mountpoint -q %s/mnt && echo "mounted" || echo "not mounted"' % path)
+        if result == "mounted":
+            return True
+        else:
+            return False
+        #print(result.stdout.strip())
+
+
+
+    def umount(self, path):
+
+        self.bash.sudo("rm {}/mnt/etc/resolv.conf || /bin/true".format(path))
+        self.bash.sudo("mv {}/mnt/etc/resolv.conf.bak {}/mnt/etc/resolv.conf || /bin/true".format(path, path))
+        self.bash.sudo("rm {}/mnt/usr/bin/qemu-arm-static || /bin/true".format(path))
+
+
+        self.bash.sudo("umount {}/mnt/dev || /bin/true".format(path))
+        self.bash.sudo("umount {}/mnt/proc || /bin/true".format(path))
+        self.bash.sudo("umount {}/mnt/sys || /bin/true".format(path))
+
+
+        self.bash.sudo("umount {}/mnt/boot || /bin/true".format(path))
+        self.bash.sudo("umount {}/mnt || /bin/true".format(path))
 
 
     def post_build(self):
         """
-        deteach
+            Cleaning Up
         """
-        self.bash.sudo('losetup --detach "{}"'.format(self.loopbackdev))
-        
+        if self.loopbackdev:
+            self.bash.sudo('losetup --detach "{}"'.format(self.loopbackdev))
         #print("result '%s'" % self.loopbackdev)
 
 
