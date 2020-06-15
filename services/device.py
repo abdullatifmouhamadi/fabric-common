@@ -33,7 +33,7 @@ class Device:
         # Create an image file
         self.bash.remove("{}/{}".format(path, name))
 
-        self.bash.run('cd {} && fallocate -l {} "{}"'.format(path, size, name))
+        self.bash.sudo('fallocate -l {} {}/{}'.format(size, path, name))
 
 
 
@@ -73,8 +73,10 @@ class Device:
 
 
     def bind_filesystem(self, path, name):
-        result           = self.bash.sudo('losetup --find --show {}/{}'.format(path, name))
-        self.loopbackdev = result.stdout.strip()
+        if self.loopbackdev == None:
+            result           = self.bash.sudo('losetup --find --show {}/{}'.format(path, name))
+            self.loopbackdev = result.stdout.strip()
+
         return self.loopbackdev
 
 
@@ -92,21 +94,20 @@ class Device:
 
     def pre_chroot(self, path, name):
 
-        if self.mounted(path=path):
-            print("imageALREADY MOUNTED")
-            return False
+        if not self.mounted(path=path):
+            device = self.bind_filesystem(path=path, name=name)
+            self.mount_image(device=device, path=path)
+            #print("imageALREADY MOUNTED")
+            #return False
+        
 
-        device = self.bind_filesystem(path=path, name=name)
+        self.bash.sudo("mount -t proc none {}/mnt/proc || /bin/true".format(path))
+        self.bash.sudo("mount -t sysfs none {}/mnt/sys || /bin/true".format(path))
+        self.bash.sudo("mount -o bind /dev {}/mnt/dev || /bin/true".format(path))
 
-        self.mount_image(device=device, path=path)
-
-        self.bash.sudo("mount -t proc none {}/mnt/proc".format(path))
-        self.bash.sudo("mount -t sysfs none {}/mnt/sys".format(path))
-        self.bash.sudo("mount -o bind /dev {}/mnt/dev".format(path))
-
-        self.bash.sudo("mv {}/mnt/etc/resolv.conf {}/mnt/etc/resolv.conf.bak".format(path, path))
-        self.bash.sudo("cp /etc/resolv.conf {}/mnt/etc/resolv.conf".format(path))
-        self.bash.sudo("cp /usr/bin/qemu-arm-static {}/mnt/usr/bin/".format(path))
+        self.bash.sudo("mv {}/mnt/etc/resolv.conf {}/mnt/etc/resolv.conf.bak || /bin/true".format(path, path))
+        self.bash.sudo("cp /etc/resolv.conf {}/mnt/etc/resolv.conf || /bin/true".format(path))
+        self.bash.sudo("cp /usr/bin/qemu-arm-static {}/mnt/usr/bin/ || /bin/true".format(path))
 
 
 
