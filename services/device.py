@@ -71,7 +71,7 @@ class Device:
 
 
 
-        # Clean
+        # umount and clean
         self.bash.sudo("umount -l {}/mnt/boot || /bin/true".format(path))
         self.bash.sudo("umount -l {}/mnt || /bin/true".format(path))
         
@@ -85,6 +85,14 @@ class Device:
             self.loopbackdev = result.stdout.strip()
 
         return self.loopbackdev
+
+
+    def mount_filesystem(self, path, name):
+        if self.loopbackdev == None:
+            result           = self.bash.sudo('losetup --find --show -P {}/{}'.format(path, name))
+            self.loopbackdev = result.stdout.strip()
+
+        return self.loopbackdev      
 
 
 
@@ -106,7 +114,7 @@ class Device:
             return False
 
 
-        device = self.bind_filesystem(path=path, name=name)
+        device = self.mount_filesystem(path=path, name=name)
         self.mount_image(device=device, path=path)
         #print("imageALREADY MOUNTED")
         #return False
@@ -152,13 +160,30 @@ class Device:
         self.bash.sudo("umount -l {}/mnt || /bin/true".format(path))
 
 
-    def post_build(self):
+    def get_binded_dev(self, path, name):
+        result = self.bash.sudo('losetup --list | awk \'{{if ($6 = "{}/{}") print $1;}}\' '.format(path, name))
+        stdout = result.stdout.strip()
+        params = stdout.split('\n')
+        if len(params) > 1:
+            return params[1]
+        return None
+
+
+    def post_build(self, path, name):
         """
             Cleaning Up
         """
-        self.umount(path=self.installDir)
+        self.umount(path=path)
+
+
+        device = self.get_binded_dev(path, name)
+        self.bash.sudo('losetup --detach "{}"'.format(device))
+
+        
+        """
         if self.loopbackdev:
             self.bash.sudo('losetup --detach "{}"'.format(self.loopbackdev))
+        """
         #print("result '%s'" % self.loopbackdev)
 
 
