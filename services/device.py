@@ -129,7 +129,12 @@ class Device:
         self.bash.sudo("cp /usr/bin/qemu-arm-static {}/mnt/usr/bin/ || /bin/true".format(path))
 
 
+    def chroot(self, path, cmd):
+        if not self.mounted(path=path):
+            print("imageNOT MOUNTED")
+            return False
 
+        self.bash.sudo("chroot {}/mnt {}".format(path, cmd))
 
 
 
@@ -179,7 +184,7 @@ class Device:
         device = self.get_binded_dev(path, name)
         self.bash.sudo('losetup --detach "{}"'.format(device))
 
-        
+
         """
         if self.loopbackdev:
             self.bash.sudo('losetup --detach "{}"'.format(self.loopbackdev))
