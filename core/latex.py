@@ -15,7 +15,8 @@ class Latex:
     def compile(self, path, src):
         try:
             #compiler = "-pdf" # -pdflatex
-            compiler = "-xelatex" # -xelatex
+            #compiler = "-xelatex" # -xelatex
+            compiler = "" # enable automatic
             r = self.bash.run('cd {} && latexmk {} -synctex=1 -interaction=nonstopmode -file-line-error {}.tex -outdir="."'.format(path, compiler, src))
             #r = self.bash.run('cd {} && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -g {}.tex -outdir="."'.format(path, src)) force 'g' parma
             #r = self.bash.run('cd {} && bibtex {}'.format(path, src))
