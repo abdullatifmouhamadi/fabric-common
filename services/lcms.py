@@ -131,7 +131,7 @@ class LearningContentManagementSystem():
                 pos = pos + 1
                 csv.append({
                     'col0':pos,
-                    'col1':str(pedagogie['module_titre']),
+                    'col1':str(sequence['module_titre']),
                     'col2':str(sequence['sequence_titre']),
                     'col3':str(sequence['sequence_taxonomie']),
                     'col4':str(sequence['sequence_duree_theorie']) +'min',
@@ -224,7 +224,14 @@ class LearningContentManagementSystem():
                         'module_template_conducteur':row['module_template_conducteur'],
                         'module_template_poster':row['module_template_poster'].replace("'",""),
                         }
-                    sequences.append({
+
+                    if isinstance(row['module_titre'],str):
+                        titre = row['module_titre']
+                    else:
+                        titre = " "
+
+                    sequences.appendes({
+                        'module_titre':titre,
                         'sequence_titre':row['sequence_titre'],
                         'sequence_objectif':row['sequence_objectif'],
                         'sequence_taxonomie':row['sequence_taxonomie'],
