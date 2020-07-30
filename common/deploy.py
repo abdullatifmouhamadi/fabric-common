@@ -1,4 +1,4 @@
-from utils import ConnectionManager
+from fabric_common.utils import ConnectionManager
 from settings import APPS, PROJECT_NAME, DB_USERNAME, DB_PASSWORD
 from fabric import Remote
 
