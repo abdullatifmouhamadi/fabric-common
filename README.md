@@ -14,8 +14,7 @@ passwd fabric
 
 # basic install
 ```
-pacman -S git base-devel go screenfetch nginx
-
+pacman -S git base-devel go screenfetch nginx certbot
 
 ```
 

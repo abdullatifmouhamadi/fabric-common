@@ -1,14 +1,17 @@
 from fabric_common.utils import ConnectionManager
-from settings import APPS, PROJECT_NAME, DB_USERNAME, DB_PASSWORD
+from settings import APPS, PROJECT_CREDENTIALS
 from fabric import Remote
 
 from patchwork.files import directory, exists
 
 class Deployable:
     def __init__(self, stage, app_name, params):
-        self.stage = stage
-        self.app = APPS[app_name]
-        self.params = params
+        self.stage        = stage
+        self.app          = APPS[app_name]
+        self.params       = params
+        self.project_key  = self.app['projectkey']
+        self.credentials  = PROJECT_CREDENTIALS[self.project_key]
+
 
         self.manager = ConnectionManager(stage = self.stage)
 
@@ -23,8 +26,8 @@ class Deployable:
         
         # biachara.dashboard-dev
         # biachara.dashboard-dev.service
-        self.nginx_filename  = PROJECT_NAME + '.' + self.app['name'] + '-' + self.stage['name']
-        self.daemon_filename = PROJECT_NAME + '.' + self.app['name'] + '-' + self.stage['name'] + '.service'
+        self.nginx_filename  = self.project_key + '.' + self.app['name'] + '-' + self.stage['name']
+        self.daemon_filename = self.project_key + '.' + self.app['name'] + '-' + self.stage['name'] + '.service'
         self.port = self.app['port_prefix'] + self.stage['port_suffix']
 
 
@@ -40,18 +43,18 @@ class Deployable:
         self.certbot_fullchain = '/etc/letsencrypt/live/'+self.stage['host']+'/fullchain.pem'
 
         # database
-        self.db_name          = PROJECT_NAME+'_'+self.stage['name']
-        self.db_username      = DB_USERNAME
-        self.db_password      = DB_PASSWORD
+        self.db_name          = self.project_key+'_'+self.stage['name']
+        self.db_username      = self.credentials['db_username']
+        self.db_password      = self.credentials['db_password']
 
         self.db_name_test     = self.db_name+'_'+'test'
-        self.db_username_test = DB_USERNAME
-        self.db_password_test = DB_PASSWORD
+        self.db_username_test = self.credentials['db_username']
+        self.db_password_test = self.credentials['db_password']
 
         # rabbitMQ
-        self.rabbitmq_username = PROJECT_NAME + '_' + self.app['name'] + '_' + self.stage['name']
+        self.rabbitmq_username = self.project_key + '_' + self.app['name'] + '_' + self.stage['name']
         self.rabbitmq_password = "change_me_please"
-        self.rabbitmq_vhost    = PROJECT_NAME + '_' + self.app['name'] + '_' + self.stage['name'] + '_vhost'
+        self.rabbitmq_vhost    = self.project_key + '_' + self.app['name'] + '_' + self.stage['name'] + '_vhost'
 
 
     def setup_rabbitmq_appuser(self):
