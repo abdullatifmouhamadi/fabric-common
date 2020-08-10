@@ -230,7 +230,7 @@ class LearningContentManagementSystem():
                     else:
                         titre = " "
 
-                    sequences.appendes({
+                    sequences.append({
                         'module_titre':titre,
                         'sequence_titre':row['sequence_titre'],
                         'sequence_objectif':row['sequence_objectif'],
