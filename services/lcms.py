@@ -12,7 +12,7 @@ import time
 
 
 class LearningContentManagementSystem():
-    def __init__(self, ssh, app, discipline, category, id):
+    def __init__(self, ssh, app, discipline, category, id, params):
         
         """
         construct
@@ -29,6 +29,9 @@ class LearningContentManagementSystem():
 
         ##
         self.latex = Latex(ssh=ssh)
+
+        self.compiler_params = params['compiler_params']
+        self.nopull          = params['nopull']
 
 
         ## DIRS
@@ -59,7 +62,7 @@ class LearningContentManagementSystem():
 
 
     def compile(self, src):
-        return self.latex.compile(path = self.app['src_dir'], src=src)
+        return self.latex.compile(path = self.app['src_dir'], src=src, params = self.compiler_params)
 
 
 
@@ -72,7 +75,8 @@ class LearningContentManagementSystem():
                       build_dir = self.app['build_dir'], 
                       repo      = self.app['repo'], 
                       branch    = self.app['branch'],
-                      owner     = self.ssh.ssh_user)
+                      owner     = self.ssh.ssh_user,
+                      nopull    = self.nopull)
         #self.bash.pwd()
         #self.bash.directory_exists(pattern='/d')
 

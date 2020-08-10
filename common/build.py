@@ -1,6 +1,6 @@
 
 class Build:
-    def __init__(self, bash, src_dir, build_dir,repo, branch, owner):
+    def __init__(self, bash, src_dir, build_dir,repo, branch, owner, nopull):
         """
         Build construct
         """
@@ -10,9 +10,11 @@ class Build:
         self.buildDir = build_dir
         self.owner    = owner
 
+        self.nopull = nopull
+
 
         self.pre_build()
-        if self.git['repo'] != 'none':
+        if self.git['repo'] != 'none' and self.nopull == False:
             self.setup_git_env()
         self.post_build()
 
