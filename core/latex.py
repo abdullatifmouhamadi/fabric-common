@@ -16,6 +16,7 @@ class Latex:
         try:
             #compiler = "-pdf" # -pdflatex
             #compiler = "-xelatex" # -xelatex
+            #compiler = "-lualatex" # -lualatex
             #compiler = "" # enable automatic
             r = self.bash.run('cd {} && latexmk {} -synctex=1 -interaction=nonstopmode -file-line-error {}.tex -outdir="."'.format(path, params, src))
             #r = self.bash.run('cd {} && latexmk {} -synctex=1 -interaction=nonstopmode -file-line-error {}.tex -outdir="."'.format(path, compiler, src))
