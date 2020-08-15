@@ -246,3 +246,12 @@ class RemoteCommand:
         except:
             return False
         return False
+
+    def run(self, command):
+        self.cnx.run(command)
+
+
+    def sudo(self, command):
+        self.cnx.sudo(command)
+    
+    

@@ -12,14 +12,28 @@ class Prestashop(Deployable):
                             params = params)
         
 
+
+
+
+
+    def install_prestashop(self):
+        SCRIPT_PATH = self.appDir + '/script/'
+
+
+        self.rc.run("cd {} && python setup.py".format(SCRIPT_PATH))
+        #self.rc.python('myscript')
+        print("salut {}".format(SCRIPT_PATH))
+
+
+
     def deploy(self):
         self.pre_deploy()
 
         # setup
-        self.setup_git_env()
+        #self.setup_git_env()
+
+        self.install_prestashop()
 
 
 
-
-
-        self.post_deploy()
+        #self.post_deploy()
