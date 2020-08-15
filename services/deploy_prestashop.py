@@ -12,17 +12,11 @@ class Prestashop(Deployable):
                             params = params)
         
 
-
-
-
-
     def install_prestashop(self):
         SCRIPT_PATH = self.appDir + '/script/'
-
-
+        APP_PATH    = self.appDir + '/src/prestashop/'
         self.rc.run("cd {} && python setup.py".format(SCRIPT_PATH))
-        #self.rc.python('myscript')
-        print("salut {}".format(SCRIPT_PATH))
+        self.rc.sudo("chmod -R 755 {}".format(APP_PATH))
 
 
 
@@ -30,10 +24,11 @@ class Prestashop(Deployable):
         self.pre_deploy()
 
         # setup
-        #self.setup_git_env()
+        self.setup_git_env()
+
 
         self.install_prestashop()
 
 
 
-        #self.post_deploy()
+        self.post_deploy()
