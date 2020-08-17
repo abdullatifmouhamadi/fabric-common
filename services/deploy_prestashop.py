@@ -49,6 +49,18 @@ class Prestashop(Deployable):
         self.rc.run("cd {} && python setup.py".format(SCRIPT_PATH))
         self.rc.sudo("chmod -R 755 {}".format(APP_PATH))
 
+    def run_startup_script(self):
+        print("\n\n==> running startup scripts\n\n")
+        SCRIPT_PATH = self.appDir + '/script/'
+        APP_PATH    = self.appDir + '/src/prestashop/'
+        self.rc.copy(src    = self.appDir + '/script/startup.php',
+                     target = APP_PATH + '/startup.php')
+
+
+        #self.rc.run("cd {} && php72 --version".format(APP_PATH))
+        self.rc.run("cd {} && php72 startup.php".format(APP_PATH))
+
+
 
 
     def deploy(self):
@@ -72,5 +84,8 @@ class Prestashop(Deployable):
         if self.rc.file_exists(pattern = self.certbot_fullchain):
             self.enable_nginx_ssl()
         
+
+        # extra scripts
+        self.run_startup_script()
 
         self.post_deploy()
