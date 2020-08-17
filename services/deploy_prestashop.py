@@ -35,7 +35,13 @@ class Prestashop(Deployable):
 
         self.update_nginx_template()
 
+    def enable_nginx_ssl(self):
+        print("\n\n==> enable_nginx_ssl\n\n")
+        # enable them
+        self.rc.copy(src    = self.appDir + '/deploy/archlinux/template-nginx-ssl',
+                     target = self.nginx_available)
 
+        self.update_nginx_template()
 
     def install_prestashop(self):
         SCRIPT_PATH = self.appDir + '/script/'
@@ -59,6 +65,12 @@ class Prestashop(Deployable):
         # nginx
         self.config_nginx_template()
 
+        
+        #cerbot - carefull- can make crash nginx
+        self.setup_certbot_ssl()
 
+        if self.rc.file_exists(pattern = self.certbot_fullchain):
+            self.enable_nginx_ssl()
+        
 
         self.post_deploy()
