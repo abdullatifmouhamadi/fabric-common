@@ -61,6 +61,19 @@ class Prestashop(Deployable):
         self.rc.run("cd {} && php72 startup.php".format(APP_PATH))
 
 
+    def setup_script_templates(self):
+        #setup.py
+        TEMPLATE_SHOP_HOST_DOMAIN = self.stage['host']
+        TEMPLATE_SHOP_DB_NAME     = 'prestashop_'+self.stage['host']
+
+        # startup.php
+        TEMPLATE_DOMAIN           = self.stage['host']
+        
+        
+        self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_SHOP_HOST_DOMAIN', TEMPLATE_SHOP_HOST_DOMAIN)
+        self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_SHOP_DB_NAME', TEMPLATE_SHOP_DB_NAME)
+        self.rc.sed(self.appDir + '/script/startup.php', 'TEMPLATE_DOMAIN', TEMPLATE_DOMAIN)
+
 
 
     def deploy(self):
@@ -84,6 +97,8 @@ class Prestashop(Deployable):
         if self.rc.file_exists(pattern = self.certbot_fullchain):
             self.enable_nginx_ssl()
         
+        # template scripts
+        self.setup_script_templates()
 
         # extra scripts
         self.run_startup_script()
