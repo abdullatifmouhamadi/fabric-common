@@ -71,7 +71,7 @@ class Prestashop(Deployable):
 
         #self.rc.run("cd {} && php72 --version".format(APP_PATH))
         if self.stage['host'] != 'localhost':
-            self.rc.run("cd {} && php72 startup.php".format(APP_PATH))
+            self.rc.run("cd {} && php72 startup.php".format(self.appDir + '/src/prestashop/'))
 
 
     def setup_script_templates(self):
