@@ -10,10 +10,22 @@ class Prestashop(Deployable):
                             stage = APP_STAGES[app_name][stage_name], 
                             app_name = app_name,
                             params = params)
+
+        
+        self.rc.mkdir(path   ='/home/prestashopd/')
+        self.rc.sudo(command = 'chmod -R 777 /home/prestashopd/')
+
+
         
     def update_nginx_template(self):
-        MYPORT = '80' #self.port
+        if self.stage['host'] == 'localhost':
+            MYPORT = '9010' #self.port
+        else:
+            MYPORT = '80' #self.port
+
         MYHOST = self.stage['host']
+
+        
         NGINX_FILENAME = self.nginx_filename
         WORKINGDIR = self.appDir + '/src/prestashop/'
 
@@ -52,23 +64,28 @@ class Prestashop(Deployable):
     def run_startup_script(self):
         print("\n\n==> running startup scripts\n\n")
         SCRIPT_PATH = self.appDir + '/script/'
-        APP_PATH    = self.appDir + '/src/prestashop/'
+        #APP_PATH    = self.appDir + '/src/prestashop/'
         self.rc.copy(src    = self.appDir + '/script/startup.php',
-                     target = APP_PATH + '/startup.php')
+                     target = self.appDir + '/src/prestashop/startup.php')
 
 
         #self.rc.run("cd {} && php72 --version".format(APP_PATH))
-        self.rc.run("cd {} && php72 startup.php".format(APP_PATH))
+        if self.stage['host'] != 'localhost':
+            self.rc.run("cd {} && php72 startup.php".format(APP_PATH))
 
 
     def setup_script_templates(self):
+        print("\n\n==> setup_script_templates\n\n")
         #setup.py
-        TEMPLATE_SHOP_HOST_DOMAIN = self.stage['host']
+        if self.stage['host'] == 'localhost':
+            TEMPLATE_SHOP_HOST_DOMAIN = 'localhost:9010'
+        else:
+            TEMPLATE_SHOP_HOST_DOMAIN = self.stage['host']
+
         TEMPLATE_SHOP_DB_NAME     = 'prestashop_'+self.stage['host']
 
         # startup.php
         TEMPLATE_DOMAIN           = self.stage['host']
-        
         
         self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_SHOP_HOST_DOMAIN', TEMPLATE_SHOP_HOST_DOMAIN)
         self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_SHOP_DB_NAME', TEMPLATE_SHOP_DB_NAME)
@@ -82,10 +99,14 @@ class Prestashop(Deployable):
         # setup
         self.setup_git_env()
 
+        # template scripts
+        self.setup_script_templates()
 
         #
         self.install_prestashop()
 
+        # extra scripts
+        self.run_startup_script()
 
         # nginx
         self.config_nginx_template()
@@ -97,10 +118,6 @@ class Prestashop(Deployable):
         if self.rc.file_exists(pattern = self.certbot_fullchain):
             self.enable_nginx_ssl()
         
-        # template scripts
-        self.setup_script_templates()
 
-        # extra scripts
-        self.run_startup_script()
 
         self.post_deploy()
