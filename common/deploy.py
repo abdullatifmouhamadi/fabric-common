@@ -44,12 +44,19 @@ class Deployable:
 
         # database
         self.db_name          = self.project_key+'_'+self.stage['name']
-        self.db_username      = self.credentials['db_username']
-        self.db_password      = self.credentials['db_password']
+        self.db_username      = self.credentials['db_username'] # deprecated
+        self.db_password      = self.credentials['db_password'] # deprecated
 
         self.db_name_test     = self.db_name+'_'+'test'
         self.db_username_test = self.credentials['db_username']
         self.db_password_test = self.credentials['db_password']
+
+        # new database
+        self.pgdb_name          = 'db_' + self.project_key + '_' + self.app['name'] + '_' + self.stage['name']
+        self.pgdb_username      = self.project_key + '_' + self.app['name'] + '_' + self.stage['name']
+        self.pgdb_username      = self.pgdb_username.replace('-','_')
+        self.pgdb_password      = self.credentials['db_password']
+
 
         # rabbitMQ
         self.rabbitmq_username = self.project_key + '_' + self.app['name'] + '_' + self.stage['name']

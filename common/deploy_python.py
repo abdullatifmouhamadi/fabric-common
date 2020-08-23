@@ -1,5 +1,4 @@
-from settings import APPS, PROJECT_NAME
-from common.deploy import Deployable
+from fabric_common.common.deploy import Deployable
 
 class DeployPython(Deployable):
 
