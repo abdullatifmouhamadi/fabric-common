@@ -12,6 +12,51 @@ class Odoo(DeployPython):
         self.ODOO_PORT 	    = self.port
         self.ODOO_CHAT_PORT = str(int(self.port) + 1)
 
+    def update_nginx_template(self):
+        
+        #ODOO_CHAT_PORT = '8072' # bricolage
+
+        #MYPORT = '80' #self.port
+        MYHOST = self.stage['host']
+        #MYSOCKET = self.appDir + '/src/project/datamanager.sock'
+        NGINX_FILENAME = self.nginx_filename
+        #MEDIA_PATH = self.appDir + '/src/project/media'
+        #STATIC_PATH = self.appDir + '/src/project/static'
+        #UPSTREAM_NAME = PROJECT_NAME + '_' + self.app['name'] + '_' + self.stage['name']
+        #UWSGI_PARAM_PATH = self.appDir + '/src/project/project/uwsgi_params'
+
+        self.rc.sed(self.nginx_available, 'MYHOST', MYHOST)
+        self.rc.sed(self.nginx_available, 'NGINX_FILENAME', NGINX_FILENAME)
+        #self.rc.sed(self.nginx_available, 'MYPORT', MYPORT)
+        self.rc.sed(self.nginx_available, 'ODOO_PORT', self.ODOO_PORT)
+        self.rc.sed(self.nginx_available, 'ODOO_CHAT_PORT', self.ODOO_CHAT_PORT)
+        #self.rc.sed(self.nginx_available, 'UPSTREAM_NAME', UPSTREAM_NAME)
+
+        #self.rc.sed(self.nginx_available, 'MEDIA_PATH', MEDIA_PATH.replace('/', r'\/'))
+        #self.rc.sed(self.nginx_available, 'STATIC_PATH', STATIC_PATH.replace('/', r'\/'))
+        #self.rc.sed(self.nginx_available, 'UWSGI_PARAM_PATH', UWSGI_PARAM_PATH.replace('/', r'\/'))
+
+        # link
+        self.rc.linksoft(self.nginx_available, self.nginx_enabled)
+
+        # reload nginx
+        self.rc.reloadnginx()
+
+
+    def config_nginx_template(self):
+        print("\n\n==> config_nginx_template\n\n")
+        self.rc.copy(src    = self.appDir + '/deploy/archlinux/template-nginx',
+                     target = self.nginx_available)
+
+        self.update_nginx_template()
+
+    def enable_nginx_ssl(self):
+        print("\n\n==> enable_nginx_ssl\n\n")
+        # enable them
+        self.rc.copy(src    = self.appDir + '/deploy/archlinux/template-nginx-ssl',
+                     target = self.nginx_available)
+
+        self.update_nginx_template()
 
 
     def config_systemd_template(self):
@@ -72,13 +117,12 @@ class Odoo(DeployPython):
         # update node env
         self.setup_python_env()
 
-        
-
         # systemd
         self.config_systemd_template()
-        
 
-        
+        # nginx
+        self.config_nginx_template()
+
         #cerbot - carefull- can make crash nginx
         self.setup_certbot_ssl()
 
