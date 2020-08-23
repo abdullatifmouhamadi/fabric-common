@@ -9,6 +9,33 @@ class Odoo(DeployPython):
                             app_name = app_name,
                             params = params)
 
+        self.ODOO_PORT 	    = self.port
+        self.ODOO_CHAT_PORT = str(int(self.port) + 1)
+
+
+
+    def config_systemd_template(self):
+        print("\n\n==> config_systemd_template\n\n")
+
+        self.rc.stopdaemon(service = self.daemon_filename)
+
+        DESCRIPTION = "Odoo deamon : {}".format(self.daemon_filename)
+        MYWORKING_DIRECTORY = self.appDir + '/deploy/'
+        EXEC_FILE = self.appDir + '/deploy/run.sh'
+
+        self.rc.sed(self.appDir + '/deploy/run.sh', 'MYPORT', self.ODOO_PORT)
+
+        self.rc.copy(src    = self.appDir + '/deploy/archlinux/template-systemd.service',
+                     target = self.daemon_location)
+
+        self.rc.sed(self.daemon_location, 'DESCRIPTION', DESCRIPTION)
+        self.rc.sed(self.daemon_location, 'MYWORKING_DIRECTORY', MYWORKING_DIRECTORY.replace('/', r'\/'))
+        self.rc.sed(self.daemon_location, 'EXEC_FILE', EXEC_FILE.replace('/', r'\/'))
+
+        self.rc.daemonreload()
+        self.rc.startdaemon(service = self.daemon_filename)
+
+
 
 
 
@@ -23,7 +50,13 @@ class Odoo(DeployPython):
         self.rc.run("cd {} && python setup.py".format(self.appDir + '/script/'))
 
 
+
+
+
+
     def deploy(self):
+
+
         self.pre_deploy()
 
         # setup
@@ -41,6 +74,9 @@ class Odoo(DeployPython):
 
         
 
+        # systemd
+        self.config_systemd_template()
+        
 
         
         #cerbot - carefull- can make crash nginx
