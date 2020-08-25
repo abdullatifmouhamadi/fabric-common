@@ -13,12 +13,37 @@ class Wordpress(Deployable):
 
 
 
+        self.rc.mkdir(path   ='/home/wordpressd/')
+        self.rc.sudo(command = 'chmod -R 777 /home/wordpressd/')
+
+    def install_prestashop(self):
+        SCRIPT_PATH = self.appDir + '/script/'
+        APP_PATH    = self.appDir + '/src/wordpress/'
+        self.rc.run("cd {} && python setup.py".format(SCRIPT_PATH))
+        self.rc.sudo("chmod -R 755 {}".format(APP_PATH))
+
+
+    def setup_script_templates(self):
+        print("\n\n==> setup_script_templates\n\n")
+        #setup.py
+
+        TEMPLATE_CMS_DB_NAME     = 'wordpress_'+self.stage['host']
+        self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_CMS_DB_NAME', TEMPLATE_CMS_DB_NAME)
+
+        ##
+
 
     def deploy(self):
         self.pre_deploy()
 
+        # setup
+        self.setup_git_env()
 
+        # template scripts
+        self.setup_script_templates()
 
+        #
+        self.install_prestashop()
 
         #cerbot - carefull- can make crash nginx
         self.setup_certbot_ssl()
