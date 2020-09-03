@@ -11,6 +11,7 @@ class Odoo(DeployPython):
 
         self.ODOO_PORT 	    = self.port
         self.ODOO_CHAT_PORT = str(int(self.port) + 1)
+        #TEMPLATE_LONGPOLLING_PORT
 
     def update_nginx_template(self):
         
@@ -86,10 +87,12 @@ class Odoo(DeployPython):
 
     def setup_database(self):
         print("\n\n==> setup_database\n\n")
-        TEMPLATE_ROLE_NAME = self.pgdb_username
-        print(TEMPLATE_ROLE_NAME)
+        TEMPLATE_ROLE_NAME        = self.pgdb_username
+        TEMPLATE_LONGPOLLING_PORT = self.ODOO_CHAT_PORT
+        #print(TEMPLATE_ROLE_NAME)
 
         self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEMPLATE_ROLE_NAME', TEMPLATE_ROLE_NAME)
+        self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEMPLATE_LONGPOLLING_PORT', TEMPLATE_LONGPOLLING_PORT)
         self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_ROLE_NAME', TEMPLATE_ROLE_NAME)
 
         self.rc.run("cd {} && python setup.py".format(self.appDir + '/script/'))
