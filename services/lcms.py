@@ -58,7 +58,11 @@ class LearningContentManagementSystem():
         
 
     
-    
+    def post_build(self):
+        self.rc.chown(owner   = '{}:wheel'.format(self.stage['user']), 
+                      pattern = self.app['build_dir'])
+
+
 
 
     def compile(self, src):
