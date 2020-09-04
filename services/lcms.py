@@ -59,7 +59,7 @@ class LearningContentManagementSystem():
 
     
     def post_build(self):
-        self.rc.chown(owner   = '{}:wheel'.format(self.stage['user']), 
+        self.bash.chown(owner   = '{}:wheel'.format(self.ssh.ssh_user), 
                       pattern = self.app['build_dir'])
 
 
