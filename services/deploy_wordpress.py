@@ -16,7 +16,49 @@ class Wordpress(Deployable):
         self.rc.mkdir(path   ='/home/wordpressd/')
         self.rc.sudo(command = 'chmod -R 777 /home/wordpressd/')
 
-    def install_prestashop(self):
+
+    def update_nginx_template(self):
+        if self.stage['host'] == 'localhost':
+            MYPORT = '9010' #self.port
+        else:
+            MYPORT = '80' #self.port
+
+        MYHOST = self.stage['host']
+
+        
+        NGINX_FILENAME = self.nginx_filename
+        WORKINGDIR = self.appDir + '/src/wordpress/'
+
+        self.rc.sed(self.nginx_available, 'MYPORT', MYPORT)
+        self.rc.sed(self.nginx_available, 'MYHOST', MYHOST)
+        self.rc.sed(self.nginx_available, 'NGINX_FILENAME', NGINX_FILENAME)
+        self.rc.sed(self.nginx_available, 'WORKINGDIR', WORKINGDIR.replace('/', r'\/'))
+
+        # link
+        self.rc.linksoft(self.nginx_available, self.nginx_enabled)
+
+        # reload nginx
+        self.rc.reloadnginx()
+
+
+    def config_nginx_template(self):
+        print("\n\n==> config_nginx_template\n\n")
+        self.rc.copy(src    = self.appDir + '/deploy/archlinux/template-nginx',
+                     target = self.nginx_available)
+
+        self.update_nginx_template()
+
+    def enable_nginx_ssl(self):
+        print("\n\n==> enable_nginx_ssl\n\n")
+        # enable them
+        self.rc.copy(src    = self.appDir + '/deploy/archlinux/template-nginx-ssl',
+                     target = self.nginx_available)
+
+        self.update_nginx_template()
+
+
+
+    def install_wordpress(self):
         SCRIPT_PATH = self.appDir + '/script/'
         APP_PATH    = self.appDir + '/src/wordpress/'
         self.rc.run("cd {} && python setup.py".format(SCRIPT_PATH))
@@ -28,8 +70,7 @@ class Wordpress(Deployable):
         #setup.py
 
         TEMPLATE_CMS_DB_NAME     = 'wordpress_'+self.stage['host']
-        self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_CMS_DB_NAME', TEMPLATE_CMS_DB_NAME)
-
+        self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_CMS_DB_NAME', TEMPLATE_CMS_DB_NAME.replace('.', '_'))
         ##
 
 
@@ -43,7 +84,11 @@ class Wordpress(Deployable):
         self.setup_script_templates()
 
         #
-        self.install_prestashop()
+        self.install_wordpress()
+
+            # nginx
+        self.config_nginx_template()
+
 
         #cerbot - carefull- can make crash nginx
         self.setup_certbot_ssl()
