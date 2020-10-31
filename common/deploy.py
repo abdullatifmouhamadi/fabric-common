@@ -4,6 +4,9 @@ from fabric import Remote
 
 from patchwork.files import directory, exists
 
+
+
+
 class Deployable:
     def __init__(self, stage, app_name, params):
         self.stage        = stage
@@ -32,8 +35,12 @@ class Deployable:
 
 
         # nginx files
-        self.nginx_available   = '/etc/nginx/sites-available/{}'.format(self.nginx_filename)
-        self.nginx_enabled     = '/etc/nginx/sites-enabled/{}'.format(self.nginx_filename)
+
+        self._NGINX_AVAILABLE_BASE = '/etc/nginx/sites-available'
+        self._NGINX_ENABLED_BASE   = '/etc/nginx/sites-enabled'
+
+        self.nginx_available   = '{}/{}'.format(self._NGINX_AVAILABLE_BASE, self.nginx_filename)
+        self.nginx_enabled     = '{}/{}'.format(self._NGINX_ENABLED_BASE, self.nginx_filename)
 
         # daemon files
         self.daemon_location     = '/etc/systemd/system/{}'.format(self.daemon_filename)
