@@ -89,11 +89,14 @@ class Odoo(DeployPython):
         print("\n\n==> setup_database\n\n")
         TEMPLATE_ROLE_NAME        = self.pgdb_username
         TEMPLATE_LONGPOLLING_PORT = self.ODOO_CHAT_PORT
+        TEAMPLATE_DB_FILTER       = self.stage['name']
         #print(TEMPLATE_ROLE_NAME)
 
         self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEMPLATE_ROLE_NAME', TEMPLATE_ROLE_NAME)
         self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEMPLATE_LONGPOLLING_PORT', TEMPLATE_LONGPOLLING_PORT)
+        self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEAMPLATE_DB_FILTER', TEAMPLATE_DB_FILTER)
         self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_ROLE_NAME', TEMPLATE_ROLE_NAME)
+        
 
         self.rc.run("cd {} && python setup.py".format(self.appDir + '/script/'))
 
