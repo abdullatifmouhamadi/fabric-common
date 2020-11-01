@@ -119,7 +119,7 @@ class OdooInstances(DeployPython):
             self.db.assign_owner(dbname=self.instance_dbname, owner=self.pgdb_username)
 
             # initiate db
-            self.rc.run("cd {} && ../venv/bin/python3.6 ../odoo_src/odoo-bin -r '{}' -w '{}' -i base,dbfilter_from_header -d '{}' --without-demo=all --stop-after-init".format(self.appDir+'/odoo_src/', self.pgdb_username, self.instance_dbpassword, self.instance_dbname))
+            self.rc.run("cd {} && ../venv/bin/python3.6 ../odoo_src/odoo-bin -r '{}' -w '{}' -i base,sale_management,account,crm -d '{}' --without-demo=all --stop-after-init --load-language 'fr_FR' --language 'fr'".format(self.appDir+'/odoo_src/', self.pgdb_username, self.instance_dbpassword, self.instance_dbname))
 
         # dbfilter = ^.+_dev.*$
         # proxy_set_header    X-Odoo-dbfilter ^.*maoredev_.*\Z;
