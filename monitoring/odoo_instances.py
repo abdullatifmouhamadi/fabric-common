@@ -93,7 +93,7 @@ class OdooInstances(DeployPython):
         # odoo-bin -c ../deploy/odoo.conf -d 'maoredev_dev' --without-demo=all
         # odoo-bin -r 'odoo_maoredev_business_dev' -w 'mayottePass976' -d 'maoredev_dev' --without-demo=all
         # ./odoo-bin -r 'odoo_maoredev_business_dev' -w 'mayottePass976' -i base -d 'maoredev_dev' --without-demo=all --stop-after-init
-
+        # https://github.com/odoo/odoo/issues/27447
 
 
         if (self.rc.db_exists(dbname=self.instance_dbname)):
