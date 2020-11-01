@@ -59,7 +59,7 @@ class OdooInstances(DeployPython):
 
         MYHOST           = self.backend_host
         NGINX_FILENAME   = self.nginx_filename
-        HEADER_DB_FILTER = self.instance#+'_'
+        HEADER_DB_FILTER = '_'+self.instance
 
 
         self.rc.sed(self.nginx_available, 'MYHOST', MYHOST)
