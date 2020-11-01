@@ -13,22 +13,25 @@ class OdooInstances(DeployPython):
                             app_name = app_name,
                             params = params)
 
+
         self.instance        = params.get('instance')
         self.instance_dbname = self.instance+'_'+stage_name
         self.ODOO_PORT 	     = self.port
 
-        self.backend_host   = ODOO_INSTANCE_STAGES[self.instance][stage_name]['backend']
-        self.ODOO_CHAT_PORT = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoochat-port']
 
+        self.backend_host        = ODOO_INSTANCE_STAGES[self.instance][stage_name]['backend']
+        self.ODOO_CHAT_PORT      = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoochat-port']
+        self.instance_dbpassword = ODOO_INSTANCE_STAGES[self.instance][stage_name]['db_password']
         
+
         # OVERRIDE NGINX FILENAME
         self.nginx_filename    = self.nginx_filename + '_' + self.instance
         self.nginx_available   = '{}/{}'.format(self._NGINX_AVAILABLE_BASE, self.nginx_filename)
         self.nginx_enabled     = '{}/{}'.format(self._NGINX_ENABLED_BASE, self.nginx_filename)
 
-
         # certbot
         self.certbot_fullchain = '/etc/letsencrypt/live/'+self.backend_host+'/fullchain.pem'
+
 
 
     # not working -> exists doesn'- work (i suspect it works only if the 'deploy' user own the file)
@@ -88,6 +91,9 @@ class OdooInstances(DeployPython):
 
         # https://www.odoo.com/fr_FR/forum/aide-1/question/creating-db-template-and-deploying-to-new-db-how-to-111933
         # odoo-bin -c ../deploy/odoo.conf -d 'maoredev_dev' --without-demo=all
+        # odoo-bin -r 'odoo_maoredev_business_dev' -w 'mayottePass976' -d 'maoredev_dev' --without-demo=all
+        # ./odoo-bin -r 'odoo_maoredev_business_dev' -w 'mayottePass976' -i base -d 'maoredev_dev' --without-demo=all --stop-after-init
+
 
 
         if (self.rc.db_exists(dbname=self.instance_dbname)):
@@ -95,9 +101,13 @@ class OdooInstances(DeployPython):
         else:
             self.setup_database_and_access( dbname=self.instance_dbname, 
                                             username=self.pgdb_username, 
-                                            password='mayottePass976')
+                                            password=self.instance_dbpassword)
 
             self.db.assign_owner(dbname=self.instance_dbname, owner=self.pgdb_username)
+
+            # initiate db
+            self.rc.run("cd {} && ../venv/bin/python3.6 ../odoo_src/odoo-bin -r '{}' -w '{}' -i base -d '{}' --without-demo=all --stop-after-init".format(self.appDir+'/odoo_src/', self.pgdb_username, self.instance_dbpassword, self.instance_dbname))
+
 
 
 
