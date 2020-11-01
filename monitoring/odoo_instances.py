@@ -59,7 +59,7 @@ class OdooInstances(DeployPython):
 
         MYHOST           = self.backend_host
         NGINX_FILENAME   = self.nginx_filename
-        HEADER_DB_FILTER = self.instance+'_'
+        HEADER_DB_FILTER = self.instance#+'_'
 
 
         self.rc.sed(self.nginx_available, 'MYHOST', MYHOST)
@@ -105,6 +105,10 @@ class OdooInstances(DeployPython):
         # https://www.odoo.com/fr_FR/forum/aide-1/question/how-to-set-change-default-user-login-and-password-when-install-using-command-line-163161
 
 
+
+        # shell 
+        # ./odoo-bin shell -r 'odoo_maoredev_business_dev' -w 'mayottePass976' -d 'maoredev_dev'
+
         if (self.rc.db_exists(dbname=self.instance_dbname)):
             print("\n\n==> bdd existe déjà")
         else:
@@ -115,9 +119,11 @@ class OdooInstances(DeployPython):
             self.db.assign_owner(dbname=self.instance_dbname, owner=self.pgdb_username)
 
             # initiate db
-            self.rc.run("cd {} && ../venv/bin/python3.6 ../odoo_src/odoo-bin -r '{}' -w '{}' -i base -d '{}' --without-demo=all --stop-after-init".format(self.appDir+'/odoo_src/', self.pgdb_username, self.instance_dbpassword, self.instance_dbname))
+            self.rc.run("cd {} && ../venv/bin/python3.6 ../odoo_src/odoo-bin -r '{}' -w '{}' -i base,dbfilter_from_header -d '{}' --without-demo=all --stop-after-init".format(self.appDir+'/odoo_src/', self.pgdb_username, self.instance_dbpassword, self.instance_dbname))
 
-
+        # dbfilter = ^.+_dev.*$
+        # proxy_set_header    X-Odoo-dbfilter ^.*maoredev_.*\Z;
+        # https://www.odoo.com/fr_FR/forum/aide-1/question/how-to-set-change-default-user-login-and-password-when-install-using-command-line-163161
 
     
     def instantiate(self):
