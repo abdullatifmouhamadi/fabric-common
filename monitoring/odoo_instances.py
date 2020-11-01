@@ -31,16 +31,6 @@ class OdooInstances(DeployPython):
         self.certbot_fullchain = '/etc/letsencrypt/live/'+self.backend_host+'/fullchain.pem'
 
 
-
-        print(ODOO_INSTANCE_STAGES[self.instance][stage_name])
-
-
-        """
-        self.ODOO_PORT 	    = self.port
-        self.ODOO_CHAT_PORT = str(int(self.port) + 1)
-        #TEMPLATE_LONGPOLLING_PORT
-        """
-
     # not working -> exists doesn'- work (i suspect it works only if the 'deploy' user own the file)
     def setup_certbot_ssl(self):
         if (self.params['certbot'] == False):
@@ -58,15 +48,16 @@ class OdooInstances(DeployPython):
 
     def update_nginx_template(self):
 
-        MYHOST = self.backend_host
+        MYHOST           = self.backend_host
+        NGINX_FILENAME   = self.nginx_filename
+        HEADER_DB_FILTER = self.instance+'_'
 
-
-        NGINX_FILENAME = self.nginx_filename
 
         self.rc.sed(self.nginx_available, 'MYHOST', MYHOST)
         self.rc.sed(self.nginx_available, 'NGINX_FILENAME', NGINX_FILENAME)
         self.rc.sed(self.nginx_available, 'ODOO_PORT', self.ODOO_PORT)
         self.rc.sed(self.nginx_available, 'ODOO_CHAT_PORT', self.ODOO_CHAT_PORT)
+        self.rc.sed(self.nginx_available, 'HEADER_DB_FILTER', HEADER_DB_FILTER)
 
         # link
         self.rc.linksoft(self.nginx_available, self.nginx_enabled)
@@ -76,17 +67,46 @@ class OdooInstances(DeployPython):
 
     def config_nginx_template(self):
         print("\n\n==> config_nginx_template\n\n")
-        """
+        self.rc.copy(src    = self.appDir + '/deploy/archlinux/template-nginx',
+                     target = self.nginx_available)
 
-        """
+        self.update_nginx_template()
+
+
 
     def enable_nginx_ssl(self):
         print("\n\n==> enable_nginx_ssl\n\n")
+        # enable them
+        self.rc.copy(src    = self.appDir + '/deploy/archlinux/template-nginx-ssl',
+                     target = self.nginx_available)
+
+        self.update_nginx_template()
 
 
     def install_database(self):
         print("\n\n==> install_database\n\n")
 
+        # https://www.odoo.com/fr_FR/forum/aide-1/question/creating-db-template-and-deploying-to-new-db-how-to-111933
+        # odoo-bin -c ../deploy/odoo.conf -d 'maoredev_dev' --without-demo=all
+
+
+        if (self.rc.db_exists(dbname=self.instance_dbname)):
+            print("\n\n==> bdd existe déjà")
+        else:
+            self.setup_database_and_access( dbname=self.instance_dbname, 
+                                            username=self.pgdb_username, 
+                                            password='mayottePass976')
+
+            self.db.assign_owner(dbname=self.instance_dbname, owner=self.pgdb_username)
+
+
+
     
     def instantiate(self):
-        print("instance = " + self.instance_dbname )
+        print("\n\n==> instance = " + self.instance_dbname + '\n\n')
+
+
+
+        self.install_database()
+
+

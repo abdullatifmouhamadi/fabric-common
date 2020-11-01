@@ -156,10 +156,13 @@ class RemotePgsql:
             return True
         except:
             return False
-        
 
-
-
+    def assign_owner(self, dbname, owner):
+        try:
+            self.m.executepg(statement = "ALTER DATABASE {} OWNER TO {};".format(dbname, owner))
+            return True
+        except:
+            return False
 
 
 class RemoteCommand:
@@ -269,3 +272,8 @@ class RemoteCommand:
         self.cnx.sudo(command)
     
     
+    def db_exists(self, dbname):
+        result = self.cnx.run('psql -U postgres -tAc "SELECT 1 FROM pg_database WHERE datname={}"'.format("'"+dbname+"'"))
+        if ("1" in result.stdout.strip()):
+            return True
+        return False
