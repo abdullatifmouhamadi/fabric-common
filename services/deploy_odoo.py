@@ -11,6 +11,10 @@ class Odoo(DeployPython):
 
         self.ODOO_PORT 	    = self.port
         self.ODOO_CHAT_PORT = str(int(self.port) + 1)
+
+        self.ODOO_UPSTREAM      = 'odoo-'+self.project_key + '-' + self.app['name'] + '-' + self.stage['name'] + '-upstream'
+        self.ODOO_CHAT_UPSTREAM = 'odoo-chat-'+self.project_key + '-' + self.app['name'] + '-' + self.stage['name'] + '-upstream'
+
         #TEMPLATE_LONGPOLLING_PORT
 
     def update_nginx_template(self):
@@ -31,7 +35,8 @@ class Odoo(DeployPython):
         #self.rc.sed(self.nginx_available, 'MYPORT', MYPORT)
         self.rc.sed(self.nginx_available, 'ODOO_PORT', self.ODOO_PORT)
         self.rc.sed(self.nginx_available, 'ODOO_CHAT_PORT', self.ODOO_CHAT_PORT)
-        #self.rc.sed(self.nginx_available, 'UPSTREAM_NAME', UPSTREAM_NAME)
+        self.rc.sed(self.nginx_available, 'ODOO_UPSTREAM', self.ODOO_UPSTREAM)
+        self.rc.sed(self.nginx_available, 'ODOO_CHAT_UPSTREAM', self.ODOO_CHAT_UPSTREAM)
 
         #self.rc.sed(self.nginx_available, 'MEDIA_PATH', MEDIA_PATH.replace('/', r'\/'))
         #self.rc.sed(self.nginx_available, 'STATIC_PATH', STATIC_PATH.replace('/', r'\/'))

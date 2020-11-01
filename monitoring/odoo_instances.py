@@ -19,10 +19,16 @@ class OdooInstances(DeployPython):
         self.ODOO_PORT 	     = self.port
 
 
-        self.backend_host        = ODOO_INSTANCE_STAGES[self.instance][stage_name]['backend']
-        self.ODOO_CHAT_PORT      = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoochat-port']
-        self.instance_dbpassword = ODOO_INSTANCE_STAGES[self.instance][stage_name]['db_password']
-        
+        self.ODOO_UPSTREAM      = 'odoo-'+self.project_key + '-' + self.app['name'] + '-' + self.stage['name'] + '_' + self.instance +'-upstream'
+        self.ODOO_CHAT_UPSTREAM = 'odoo-chat-'+self.project_key + '-' + self.app['name'] + '-' + self.stage['name'] + '_' + self.instance +'-upstream'
+
+
+        self.backend_host           = ODOO_INSTANCE_STAGES[self.instance][stage_name]['backend']
+        self.ODOO_CHAT_PORT         = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoochat-port']
+        self.instance_dbpassword    = ODOO_INSTANCE_STAGES[self.instance][stage_name]['db_password']
+        self.instance_odoo_login    = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoo_login']
+        self.instance_odoo_password = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoo_password']
+
 
         # OVERRIDE NGINX FILENAME
         self.nginx_filename    = self.nginx_filename + '_' + self.instance
@@ -61,6 +67,8 @@ class OdooInstances(DeployPython):
         self.rc.sed(self.nginx_available, 'ODOO_PORT', self.ODOO_PORT)
         self.rc.sed(self.nginx_available, 'ODOO_CHAT_PORT', self.ODOO_CHAT_PORT)
         self.rc.sed(self.nginx_available, 'HEADER_DB_FILTER', HEADER_DB_FILTER)
+        self.rc.sed(self.nginx_available, 'ODOO_UPSTREAM', self.ODOO_UPSTREAM)
+        self.rc.sed(self.nginx_available, 'ODOO_CHAT_UPSTREAM', self.ODOO_CHAT_UPSTREAM)
 
         # link
         self.rc.linksoft(self.nginx_available, self.nginx_enabled)
@@ -94,6 +102,7 @@ class OdooInstances(DeployPython):
         # odoo-bin -r 'odoo_maoredev_business_dev' -w 'mayottePass976' -d 'maoredev_dev' --without-demo=all
         # ./odoo-bin -r 'odoo_maoredev_business_dev' -w 'mayottePass976' -i base -d 'maoredev_dev' --without-demo=all --stop-after-init
         # https://github.com/odoo/odoo/issues/27447
+        # https://www.odoo.com/fr_FR/forum/aide-1/question/how-to-set-change-default-user-login-and-password-when-install-using-command-line-163161
 
 
         if (self.rc.db_exists(dbname=self.instance_dbname)):
@@ -110,13 +119,19 @@ class OdooInstances(DeployPython):
 
 
 
-
     
     def instantiate(self):
         print("\n\n==> instance = " + self.instance_dbname + '\n\n')
 
-
-
         self.install_database()
 
+        # nginx
+        self.config_nginx_template()
+
+        #cerbot - carefull- can make crash nginx
+        self.setup_certbot_ssl()
+
+        if self.rc.file_exists(pattern = self.certbot_fullchain):
+            self.enable_nginx_ssl()
+        
 
