@@ -17,6 +17,7 @@ class OdooInstances(DeployPython):
         self.instance        = params.get('instance')
         self.instance_dbname = self.instance+'_'+stage_name
         self.ODOO_PORT 	     = self.port
+        self.ODOO_CHAT_PORT  = str(int(self.port) + 1)
 
 
         self.ODOO_UPSTREAM      = 'odoo-'+self.project_key + '-' + self.app['name'] + '-' + self.stage['name'] + '_' + self.instance +'-upstream'
@@ -24,7 +25,7 @@ class OdooInstances(DeployPython):
 
 
         self.backend_host           = ODOO_INSTANCE_STAGES[self.instance][stage_name]['backend']
-        self.ODOO_CHAT_PORT         = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoochat-port']
+        #self.ODOO_CHAT_PORT         = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoochat-port']
         self.instance_dbpassword    = ODOO_INSTANCE_STAGES[self.instance][stage_name]['db_password']
         self.instance_odoo_login    = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoo_login']
         self.instance_odoo_password = ODOO_INSTANCE_STAGES[self.instance][stage_name]['odoo_password']
