@@ -3,7 +3,7 @@ from fabric_common.common.deploy_python import DeployPython
 
 from patchwork.files import directory, exists
 
-from sh import rsync
+from sh import ls, rsync, sshpass
 
 class IotBox(DeployPython):
 
@@ -20,15 +20,24 @@ class IotBox(DeployPython):
 
         """
         self.params = params
+        self.host   = params.get('host')
+        self.ssh_login  = params.get('user')
+        self.ssh_passwd = params.get('password')
 
-
-
+    # sshpass -p "Houda2016" rsync -avz ./deploy/fabric_common/templates/posbox/* deploy@localhost:/srv/http/iotbox-prod/posbox
+    # https://stackoverflow.com/questions/3299951/how-to-pass-password-automatically-for-rsync-ssh-command
     def setup_template(self):
         """ 
 
         """
         print(self.params)
-        rsync("-h")
+        #rsync("-avz", '../deploy/fabric_common/templates/posbox/*', 'deploy@{}:{}'.format(self.host, self.appDir) )
+
+        a = sshpass("-p", self.ssh_passwd, "rsync","-avz", "./fabric_common/templates/posbox/", 'deploy@{}:{}'.format(self.host, self.appDir)  )
+
+        #a = ls("-al", "../deploy/fabric_common/templates/posbox")
+
+        print(a)
 
 
     # https://github.com/odoo/odoo/blob/13.0/addons/point_of_sale/tools/posbox/overwrite_before_init/etc/init_posbox_image.sh
@@ -73,4 +82,4 @@ class IotBox(DeployPython):
 
 
 
-        self.post_deploy()
+        #self.post_deploy()
