@@ -1,0 +1,32 @@
+[Unit]
+Description=DESCRIPTION
+Requires=postgresql.service
+After=network.target postgresql.service
+
+[Service]
+WorkingDirectory=MYWORKING_DIRECTORY
+Type=simple
+User=deploy
+Group=wheel
+Restart=always
+PermissionsStartOnly=true
+
+ExecStart=EXEC_FILE
+StandardOutput=journal+console
+
+[Install]
+WantedBy=multi-user.target
+
+
+----------------------------------------
+
+Description=Odoo PosBoxLess
+After=network.target
+[Service]
+Type=simple
+User=pi
+Group=pi
+ExecStart=/home/pi/odoo/odoo.py --load=web,hw_proxy,hw_posbox_homepage,hw_posbox_upgrade,hw_scale,hw_scanner,hw_escpos
+KillMode=mixed
+[Install]
+WantedBy=multi-user.target

@@ -9,3 +9,9 @@ tqdm
 boto3
 botocore
 simplejson
+
+
+#hw
+pyserial
+pyusb
+qrcode

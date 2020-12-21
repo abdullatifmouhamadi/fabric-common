@@ -21,19 +21,24 @@ class IotBox(DeployPython):
 
 
 
+    # https://github.com/odoo/odoo/blob/13.0/addons/point_of_sale/tools/posbox/overwrite_before_init/etc/init_posbox_image.sh
+    # https://github.com/odoo/odoo/blob/13.0/addons/point_of_sale/tools/posbox/posbox_create_image.sh
+
+
     def setup_git_env(self):
         print("\n\n==> setup_git_env\n\n")
 
-        if not exists(self.cnx, self.appDir + '/.git'):
-            self.cnx.run('cd {} && git clone -b 9.0 --no-checkout --depth 1 https://github.com/odoo/odoo.git'.format(self.appDir))
+        SRC_DIR = 'odoo_src'
 
-            self.cnx.run('cd {} && git config core.sparsecheckout true echo "addons/web addons/web_kanban addons/hw_* addons/point_of_sale/tools/posbox/configuration openerp/ odoo.py" | tee --append .git/info/sparse-checkout > /dev/null'.format(self.appDir + '/odoo'))
-            self.cnx.run('cd {} && git read-tree -mu HEAD'.format(self.appDir + '/odoo'))
-
+        if not exists(self.cnx, self.appDir + '/' + SRC_DIR + '/.git'):
+            #self.cnx.run('cd {} && git clone -b 13.0 --no-local --no-checkout --depth 1 https://github.com/odoo/odoo.git "{}"'.format(self.appDir, SRC_DIR))
+            self.cnx.run('cd {} && git clone -b 13.0 --depth 1 https://github.com/odoo/odoo.git "{}"'.format(self.appDir, SRC_DIR))
         else:
             print("GIT repository already exists")
 
-
+        #self.cnx.run('cd {} && git config core.sparsecheckout true'.format(self.appDir + '/' + SRC_DIR))
+        #self.cnx.run('cd {} && echo "addons/web addons/hw_* addons/point_of_sale/tools/posbox/configuration odoo/ odoo-bin" | tee --append .git/info/sparse-checkout > /dev/null'.format(self.appDir + '/' + SRC_DIR))
+        #self.cnx.run('cd {} && git read-tree -mu HEAD'.format(self.appDir + '/' + SRC_DIR))
 
 
 
