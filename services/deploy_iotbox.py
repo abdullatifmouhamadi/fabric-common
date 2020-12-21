@@ -1,6 +1,8 @@
 from settings import APPS, APP_STAGES
 from fabric_common.common.deploy_python import DeployPython
 
+from patchwork.files import directory, exists
+
 class IotBox(DeployPython):
 
     def __init__(self, ssh, app_name, stage_name, params):
@@ -19,6 +21,17 @@ class IotBox(DeployPython):
 
 
 
+    def setup_git_env(self):
+        print("\n\n==> setup_git_env\n\n")
+
+        if not exists(self.cnx, self.appDir + '/.git'):
+            self.cnx.run('cd {} && git clone -b 9.0 --no-checkout --depth 1 https://github.com/odoo/odoo.git'.format(self.appDir))
+
+        else:
+            print("GIT repository already exists")
+
+
+
 
 
 
@@ -29,8 +42,18 @@ class IotBox(DeployPython):
     
     def deploy(self):
 
-        """
+        self.pre_deploy()
 
-        """
+        # setup
+        self.setup_git_env()
 
-        self.rc.run('ls -al')
+
+
+
+
+
+
+
+
+
+        self.post_deploy()
