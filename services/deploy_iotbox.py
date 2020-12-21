@@ -3,6 +3,8 @@ from fabric_common.common.deploy_python import DeployPython
 
 from patchwork.files import directory, exists
 
+from sh import rsync
+
 class IotBox(DeployPython):
 
     def __init__(self, ssh, app_name, stage_name, params):
@@ -17,8 +19,16 @@ class IotBox(DeployPython):
         """
 
         """
+        self.params = params
 
 
+
+    def setup_template(self):
+        """ 
+
+        """
+        print(self.params)
+        rsync("-h")
 
 
     # https://github.com/odoo/odoo/blob/13.0/addons/point_of_sale/tools/posbox/overwrite_before_init/etc/init_posbox_image.sh
@@ -51,7 +61,8 @@ class IotBox(DeployPython):
         self.pre_deploy()
 
         # setup
-        self.setup_git_env()
+        self.setup_template()
+        #self.setup_git_env()
 
 
 
