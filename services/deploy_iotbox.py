@@ -27,10 +27,11 @@ class IotBox(DeployPython):
         if not exists(self.cnx, self.appDir + '/.git'):
             self.cnx.run('cd {} && git clone -b 9.0 --no-checkout --depth 1 https://github.com/odoo/odoo.git'.format(self.appDir))
 
+            self.cnx.run('cd {} && git config core.sparsecheckout true echo "addons/web addons/web_kanban addons/hw_* addons/point_of_sale/tools/posbox/configuration openerp/ odoo.py" | tee --append .git/info/sparse-checkout > /dev/null'.format(self.appDir + '/odoo'))
+            self.cnx.run('cd {} && git read-tree -mu HEAD'.format(self.appDir + '/odoo'))
+
         else:
             print("GIT repository already exists")
-
-
 
 
 
