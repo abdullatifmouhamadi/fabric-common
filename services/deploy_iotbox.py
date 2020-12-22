@@ -87,7 +87,7 @@ class IotBox(DeployPython):
 
 
         # update node env
-        self.setup_python_env()
+        #self.setup_python_env()
 
 
 
