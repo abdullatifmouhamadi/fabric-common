@@ -5,6 +5,10 @@ from patchwork.files import directory, exists
 
 from sh import ls, rsync, sshpass
 
+
+from sh_common.common.utils import log, logi
+from sh_common.odoo.odoo import release_path, _pull_release
+
 class IotBox(DeployPython):
 
     def __init__(self, ssh, app_name, stage_name, params):
@@ -24,20 +28,27 @@ class IotBox(DeployPython):
         self.ssh_login  = params.get('user')
         self.ssh_passwd = params.get('password')
 
-    # sshpass -p "Houda2016" rsync -avz ./deploy/fabric_common/templates/posbox/* deploy@localhost:/srv/http/iotbox-prod/posbox
+    # sshpass -p "password" rsync -avz ./deploy/fabric_common/templates/posbox/* deploy@localhost:/srv/http/iotbox-prod/posbox
     # https://stackoverflow.com/questions/3299951/how-to-pass-password-automatically-for-rsync-ssh-command
     def setup_template(self):
         """ 
 
         """
-        print(self.params)
-        #rsync("-avz", '../deploy/fabric_common/templates/posbox/*', 'deploy@{}:{}'.format(self.host, self.appDir) )
 
-        a = sshpass("-p", self.ssh_passwd, "rsync","-avz", "./fabric_common/templates/posbox/", 'deploy@{}:{}'.format(self.host, self.appDir)  )
+        r = sshpass("-p", self.ssh_passwd, "rsync","-avz", "./fabric_common/templates/posbox/", 'deploy@{}:{}'.format(self.host, self.appDir)  )
+        logi(title="envoie via ssh des templates",msg=r)
 
-        #a = ls("-al", "../deploy/fabric_common/templates/posbox")
 
-        print(a)
+
+        if not exists(self.cnx, self.appDir + '/odoo_src'):
+            path_release = _pull_release(release = '13.0')
+
+            r = sshpass("-p", self.ssh_passwd, "rsync","-avz", path_release, 'deploy@{}:{}'.format(self.host, self.appDir)  )
+            logi(title="envoie via ssh de l'instance des sources odoo",msg=r)
+
+            self.cnx.run('cd {} && unzip 13.0.zip && mkdir odoo_src && mv odoo-13.0/* odoo_src && rm -rf odoo-13.0 && rm 13.0.zip'.format(self.appDir))
+
+
 
 
     # https://github.com/odoo/odoo/blob/13.0/addons/point_of_sale/tools/posbox/overwrite_before_init/etc/init_posbox_image.sh
