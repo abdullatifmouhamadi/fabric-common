@@ -17,10 +17,6 @@ else # init
     pip install -r requirements.txt
 
 
-
-    echo "==> Cloning odoo"
-    git clone https://www.github.com/odoo/odoo --depth 1 --branch 13.0 odoo_src
-
     echo "==> Running patchs ..."
 	chmod +x ./script/patchs/archlinux_install.sh
 	./script/patchs/archlinux_install.sh

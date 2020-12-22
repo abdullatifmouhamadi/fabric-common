@@ -51,6 +51,7 @@ class IotBox(DeployPython):
 
 
 
+
     # https://github.com/odoo/odoo/blob/13.0/addons/point_of_sale/tools/posbox/overwrite_before_init/etc/init_posbox_image.sh
     # https://github.com/odoo/odoo/blob/13.0/addons/point_of_sale/tools/posbox/posbox_create_image.sh
 
@@ -85,6 +86,8 @@ class IotBox(DeployPython):
         #self.setup_git_env()
 
 
+        # update node env
+        self.setup_python_env()
 
 
 
