@@ -1,6 +1,6 @@
 # required
 
-sudo pacman -S cups dbus
+sudo pacman -S cups dbus python-gobject 
 
 
 

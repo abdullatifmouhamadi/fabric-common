@@ -1,19 +1,18 @@
 setuptools
 wheel
 libsass
-phonenumbers
+#phonenumbers
 #psycopg2-binary
-pysftp
-dropbox
-tqdm
-boto3
-botocore
+#pysftp
+#dropbox
+#tqdm
+#boto3
+#botocore
 simplejson
 
 #hw
 #gobject
-GObject
-PyGObject
+#PyGObject
 dbus-python
 netifaces
 gatt
