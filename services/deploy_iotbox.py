@@ -32,6 +32,10 @@ class IotBox(DeployPython):
         self.ssh_login  = params.get('user')
         self.ssh_passwd = params.get('password')
 
+    def setup_postgresql(self):
+        self.db.create_role(role = self.ssh_login)
+
+
     # sshpass -p "password" rsync -avz ./deploy/fabric_common/templates/posbox/* deploy@localhost:/srv/http/iotbox-prod/posbox
     # https://stackoverflow.com/questions/3299951/how-to-pass-password-automatically-for-rsync-ssh-command
     def setup_template(self):
@@ -94,7 +98,8 @@ class IotBox(DeployPython):
         self.setup_python_env()
 
 
-
+        # db
+        self.setup_postgresql()
 
 
 

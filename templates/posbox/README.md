@@ -1,6 +1,6 @@
 # required
 
-sudo pacman -S cups 
+sudo pacman -S cups dbus
 
 
 

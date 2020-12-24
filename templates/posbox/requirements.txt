@@ -11,6 +11,12 @@ botocore
 simplejson
 
 #hw
+#gobject
+GObject
+PyGObject
+dbus-python
+netifaces
+gatt
 pyserial
 pyusb
 qrcode
