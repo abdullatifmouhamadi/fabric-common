@@ -11,11 +11,14 @@ libsass
 simplejson
 
 #hw
-#gobject
-#PyGObject
+gobject
+PyGObject
 dbus-python
 netifaces
 gatt
 pyserial
 pyusb
 qrcode
+v4l2
+pycups
+pyOpenSSL

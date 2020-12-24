@@ -1,6 +1,6 @@
 # required
 
-sudo pacman -S cups dbus python-gobject 
+sudo pacman -S cups dbus python-gobject gobject-introspection
 
 
 
