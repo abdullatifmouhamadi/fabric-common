@@ -23,6 +23,10 @@ class IotBox(DeployPython):
         """
 
         """
+        ODOOD_PATH = '/home/odood/'
+        self.rc.mkdir(path = ODOOD_PATH)
+        self.rc.chmod(permissions = "777", pattern=ODOOD_PATH)
+
         self.params = params
         self.host   = params.get('host')
         self.ssh_login  = params.get('user')
@@ -87,7 +91,7 @@ class IotBox(DeployPython):
 
 
         # update node env
-        #self.setup_python_env()
+        self.setup_python_env()
 
 
 
