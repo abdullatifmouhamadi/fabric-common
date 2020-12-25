@@ -203,5 +203,6 @@ class Device:
               build_dir = self.app['build_dir'], 
               repo      = self.app['repo'], 
               branch    = self.app['branch'],
-              owner     = self.ssh.ssh_user)
+              owner     = self.ssh.ssh_user,
+              nopull    = False)
 

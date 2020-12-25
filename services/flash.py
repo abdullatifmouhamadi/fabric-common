@@ -1,11 +1,11 @@
 from fabric_common.common.build import Build
-from core.device import Device
+from ..core.device import Device
 from pprint import pprint
 
 
 
 class Flash(Device):
-    def __init__(self, ssh, app, target, device):
+    def __init__(self, ssh, app, target, params):
         Device.__init__(self, ssh, app)
         """
         Build construct
