@@ -7,6 +7,7 @@ sudo pacman -S bluez bluez-utils
 
 systemctl start cups
 systemctl start bluetooth
+bluetoothctl power on
 
 # controle du bluetooth
 
