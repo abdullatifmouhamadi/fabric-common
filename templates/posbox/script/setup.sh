@@ -28,6 +28,11 @@ else # init
     cp ./script/patchs/v4l2.py.iotpatch ./venv/lib/python3.6/site-packages/
     cd ./venv/lib/python3.6/site-packages/
     patch v4l2.py < v4l2.py.iotpatch
+    cd -
+    echo "==> Running http.py patchs ..."
+    cp ./script/patchs/http.py.iotpatch ./odoo_src/odoo
+    cd ./odoo_src/odoo
+    patch http.py < http.py.iotpatch
     
 
 fi
