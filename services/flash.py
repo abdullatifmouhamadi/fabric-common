@@ -24,6 +24,9 @@ class Flash(Device):
         self.image_path = self.installDir
 
 
+        self.copy_utils()
+
+
         self.create_image_file(name=self.image_name, size="8G", path=self.image_path)
         self.pre_chroot(path=self.image_path, name=self.image_name)
         self.base_config()
@@ -31,6 +34,9 @@ class Flash(Device):
         
  
         self.post_build(path=self.image_path, name=self.image_name)
+
+
+
 
     def common_config(self):
 
@@ -74,6 +80,18 @@ class Flash(Device):
                           sudo ca-certificates ca-certificates-utils \
                          ")
 
+
+
+
+    def copy_utils(self):
+        """
+        a
+        """
+        r = sshpass("-p", self.ssh_pass, "rsync","-avz", "./fabric_common/templates/rpi3-arch/local-scripts", 'deploy@{}:~/Developer'.format(self.ssh_host)  )
+        logi(title="envoie scriptes",msg=r)
+
+        self.bash.sudo("cp -r ~/Developer/local-scripts/* {}/ || /bin/true".format(self.image_path))
+        self.bash.sudo("chmod +x {}/clean-img.sh".format(self.image_path))
 
 
 
