@@ -26,7 +26,7 @@ class Flash(Device):
 
         self.create_image_file(name=self.image_name, size="8G", path=self.image_path)
         self.pre_chroot(path=self.image_path, name=self.image_name)
-        #self.base_config()
+        self.base_config()
         self.common_config()
         
  
