@@ -11,6 +11,12 @@ class Device:
         self.app        = app
         self.installDir = app['install_dir']
 
+
+        EMBEDDED_PATH = '/home/embeddedd/'
+        self.bash.mkdir(path = EMBEDDED_PATH)
+        self.bash.chmod(permissions = "777", pattern=EMBEDDED_PATH)
+
+
         self.pre_build()
 
 

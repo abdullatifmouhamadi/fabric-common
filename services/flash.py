@@ -30,11 +30,11 @@ class Flash(Device):
 
 
     def base_config(self):
-        #self.chroot(path=self.image_path, 
-        #            cmd ="pacman-key --init")
+        self.chroot(path=self.image_path, 
+                    cmd ="pacman-key --init")
 
-        #self.chroot(path=self.image_path, 
-        #            cmd ="pacman-key --populate archlinuxarm")
+        self.chroot(path=self.image_path, 
+                    cmd ="pacman-key --populate archlinuxarm")
 
         self.chroot(path=self.image_path, 
                     cmd ="cat /etc/resolv.conf") # google ip
@@ -42,12 +42,8 @@ class Flash(Device):
         self.chroot(path=self.image_path, 
                     cmd ="ping -c 5 -W 2 google.fr") # google ip
 
-
-
-
-        return False  
         self.chroot(path=self.image_path, 
-                    cmd ="pacman -S --noconfirm --needed \
+                    cmd ="pacman -Sy --noconfirm --needed \
                           git base-devel go python python-pip \
                           sudo ca-certificates ca-certificates-utils \
                          ")
