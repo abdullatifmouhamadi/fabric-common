@@ -30,7 +30,7 @@ class Flash(Device):
         self.common_config()
         
  
-        #self.post_build(path=self.image_path, name=self.image_name)
+        self.post_build(path=self.image_path, name=self.image_name)
 
     def common_config(self):
 
