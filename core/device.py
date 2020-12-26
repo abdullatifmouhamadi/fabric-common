@@ -27,7 +27,7 @@ class Device:
     def create_image_file(self, name, size, path):
 
         if self.bash.file_exists(pattern="{}/{}".format(path, name)):
-            print("imageALREADY EXISTS")
+            print("image ALREADY EXISTS")
             return False
 
         # Create an image file
@@ -110,7 +110,7 @@ class Device:
     def pre_chroot(self, path, name):
 
         if self.mounted(path=path):
-            print("imageALREADY MOUNTED")
+            print("image ALREADY MOUNTED")
             return False
 
 
@@ -131,7 +131,7 @@ class Device:
 
     def chroot(self, path, cmd):
         if not self.mounted(path=path):
-            print("imageNOT MOUNTED")
+            print("image NOT MOUNTED")
             return False
 
         self.bash.sudo("chroot {}/mnt {}".format(path, cmd))
@@ -163,6 +163,10 @@ class Device:
 
         self.bash.sudo("umount -l {}/mnt/boot || /bin/true".format(path))
         self.bash.sudo("umount -l {}/mnt || /bin/true".format(path))
+
+        print("IMAGE UMOUNTED")
+
+
 
 
     def get_binded_dev(self, path, name):

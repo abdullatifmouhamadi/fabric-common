@@ -25,21 +25,39 @@ class Flash(Device):
         self.pre_chroot(path=self.image_path, name=self.image_name)
         self.base_config()
         
-
+ 
         #self.post_build(path=self.image_path, name=self.image_name)
 
 
-
     def base_config(self):
+        #self.chroot(path=self.image_path, 
+        #            cmd ="pacman-key --init")
+
+        #self.chroot(path=self.image_path, 
+        #            cmd ="pacman-key --populate archlinuxarm")
+
+        self.chroot(path=self.image_path, 
+                    cmd ="cat /etc/resolv.conf") # google ip
+
+        self.chroot(path=self.image_path, 
+                    cmd ="ping -c 5 -W 2 google.fr") # google ip
+
+
+
+
+        return False  
         self.chroot(path=self.image_path, 
                     cmd ="pacman -S --noconfirm --needed \
                           git base-devel go python python-pip \
-                          sudo \
-                          i2c-tools lm_sensors\
+                          sudo ca-certificates ca-certificates-utils \
                          ")
 
         self.chroot(path=self.image_path, 
                     cmd ="mkdir -p ~/Developer")
+
+
+
+                    
 
 
 
