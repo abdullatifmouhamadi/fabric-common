@@ -12,6 +12,12 @@ class Device:
         self.installDir = app['install_dir']
 
 
+        self.ssh_host = ssh.ssh_host
+        self.ssh_user = ssh.ssh_user
+        self.ssh_pass = ssh.ssh_pass
+
+
+
         EMBEDDED_PATH = '/home/embeddedd/'
         self.bash.mkdir(path = EMBEDDED_PATH)
         self.bash.chmod(permissions = "777", pattern=EMBEDDED_PATH)
@@ -141,8 +147,6 @@ class Device:
             return False
 
         self.bash.sudo("chroot {}/mnt {}".format(path, cmd))
-
-
 
 
     def mounted(self, path):
