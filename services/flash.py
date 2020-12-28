@@ -9,18 +9,17 @@ from sh_common.common.utils import log, logi
 
 class Flash(Device):
     def __init__(self, ssh, app, target, params):
-        Device.__init__(self, ssh, app)
+        Device.__init__(self, ssh, app, target)
         """
         Build construct
         """
-        self.target = target
         self.setup()
 
 
         self.download_rootfilesystem()
 
 
-        self.image_name = self.target.get('image_name')#"custom-rpi3.img"
+
         self.image_path = self.installDir
 
 

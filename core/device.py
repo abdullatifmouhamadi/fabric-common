@@ -1,7 +1,7 @@
 from fabric_common.common.build import Build
 
 class Device:
-    def __init__(self, ssh, app):
+    def __init__(self, ssh, app, target):
         """
         Build construct
         """
@@ -17,6 +17,9 @@ class Device:
         self.ssh_pass = ssh.ssh_pass
 
 
+        self.target = target
+        self.image_name = self.target.get('image_name')#"custom-rpi3.img"
+        self.tarball = self.target.get('tarball')#"custom-rpi3.img"
 
         EMBEDDED_PATH = '/home/embeddedd/'
         self.bash.mkdir(path = EMBEDDED_PATH)
@@ -79,7 +82,7 @@ class Device:
 
         # Install the base system
 
-        self.bash.sudo('bsdtar -xpf {}/ArchLinuxARM-rpi-2-latest.tar.gz -C {}/mnt'.format(path, path) )
+        self.bash.sudo('bsdtar -xpf {}/{} -C {}/mnt'.format(path, self.tarball,path) )
 
 
 
