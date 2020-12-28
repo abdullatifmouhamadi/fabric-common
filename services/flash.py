@@ -26,13 +26,13 @@ class Flash(Device):
         self.copy_utils()
 
 
-        self.create_image_file(name=self.image_name, size="16G", path=self.image_path)
+        self.create_image_file(name=self.image_name, size="14G", path=self.image_path)
         self.pre_chroot(path=self.image_path, name=self.image_name)
         self.base_config()
         self.common_config()
         
  
-        #self.post_build(path=self.image_path, name=self.image_name)
+        self.post_build(path=self.image_path, name=self.image_name)
 
 
 

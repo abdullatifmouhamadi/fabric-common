@@ -64,8 +64,8 @@ class Device:
         
 
         self.bash.sudo('parted --script {} mklabel msdos'.format(self.loopbackdev))
-        self.bash.sudo('parted --script {} mkpart primary fat32 0% 100M'.format(self.loopbackdev))
-        self.bash.sudo('parted --script {} mkpart primary ext4 100M 100%'.format(self.loopbackdev))
+        self.bash.sudo('parted --script {} mkpart primary fat32 0% 200M'.format(self.loopbackdev))
+        self.bash.sudo('parted --script {} mkpart primary ext4 200M 100%'.format(self.loopbackdev))
         
 
         self.bash.sudo("mkfs.vfat -F32 %s" % p1)
@@ -82,7 +82,7 @@ class Device:
 
         # Install the base system
 
-        self.bash.sudo('bsdtar -xpf {}/{} -C {}/mnt'.format(path, self.tarball,path) )
+        self.bash.sudo('bsdtar -xpf {}/{} -C {}/mnt'.format(path, self.tarball, path) )
 
 
 
