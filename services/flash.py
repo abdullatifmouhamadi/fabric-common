@@ -60,8 +60,10 @@ class Flash(Device):
         self.chroot(path=self.image_path, 
                     cmd ="pacman -Suy --noconfirm --needed \
                           networkmanager network-manager-applet \
-                          xorg xorg-luit xorg-mkfontscale chromium firefox \
-                          xdg-utils ttf-freefont \
+                          xorg-{server,xinit,apps} xf86-input-libinput xdg-user-dirs \
+                          ttf-{bitstream-vera,liberation,freefont,dejavu} freetype2 \
+                          xf86-video-vesa \
+                          chromium firefox firefox-i18n-fr \
                          ")
         # sddm
         self.chroot(path=self.image_path, 
@@ -70,10 +72,12 @@ class Flash(Device):
                          ")
 
         #lightdm
+        """
         self.chroot(path=self.image_path, 
                     cmd ="pacman -Suy --noconfirm --needed \
                          lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings\
                          ")
+        """
 
 
     def common_config(self):
