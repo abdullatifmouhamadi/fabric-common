@@ -32,7 +32,7 @@ class Flash(Device):
         self.base_config()
         self.install_essential()
         self.install_xfce4()
-        self.install_lxqt()
+        #self.install_lxqt() # ne fonctionne pas
 
         self.common_config()
         
