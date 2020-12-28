@@ -44,7 +44,7 @@ class Flash(Device):
                           xfce4 xfce4-goodies gvfs vlc quodlibet python-pyinotify \
                           xarchiver claws-mail galculator evince \
                           ffmpegthumbnailer xscreensaver pavucontrol \
-                          pulseaudio-{alsa,bluetooth} blueman-{pulse,gstreamer} \
+                          pulseaudio-{alsa,bluetooth} \
                           system-config-printer \
                          ")
 
@@ -52,7 +52,7 @@ class Flash(Device):
         self.chroot(path=self.image_path, 
                     cmd ="pacman -Suy --noconfirm --needed \
                           networkmanager network-manager-applet \
-                          xorg chromium firefox \
+                          xorg xorg-luit xorg-mkfontscale chromium firefox \
                           xdg-utils ttf-freefont \
                          ")
         # sddm
