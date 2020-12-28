@@ -28,15 +28,23 @@ class Flash(Device):
 
         self.create_image_file(name=self.image_name, size="14G", path=self.image_path)
         self.pre_chroot(path=self.image_path, name=self.image_name)
+        
         self.base_config()
         self.install_essential()
         self.install_xfce4()
+        self.install_lxqt()
 
         self.common_config()
+        
         
  
         self.post_build(path=self.image_path, name=self.image_name)
 
+    def install_lxqt(self):
+        self.chroot(path=self.image_path, 
+                    cmd ="pacman -Suy --noconfirm --needed \
+                          lxqt breeze-icons oxygen-icons\
+                         ")
 
     def install_xfce4(self):
         self.chroot(path=self.image_path, 
