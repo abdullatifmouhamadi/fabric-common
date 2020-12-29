@@ -56,12 +56,12 @@ class Flash(Device):
                           system-config-printer \
                          ")
 
-    def install_essential(self):
+    def install_essential(self): #ttf-freefont,xorg-apps -> conflict 
         self.chroot(path=self.image_path, 
                     cmd ="pacman -Suy --noconfirm --needed \
                           networkmanager network-manager-applet \
-                          xorg-{server,xinit,apps} xf86-input-libinput xdg-user-dirs \
-                          ttf-{bitstream-vera,liberation,freefont,dejavu} freetype2 \
+                          xorg-{server,xinit} xf86-input-libinput xdg-user-dirs \
+                          ttf-{bitstream-vera,liberation,dejavu} freetype2 \
                           xf86-video-vesa \
                           chromium firefox firefox-i18n-fr \
                          ")
