@@ -1,5 +1,6 @@
 # required
 
+sudo pacman -S unzip
 sudo pacman -S cups dbus ipp-usb python-gobject gobject-introspection bluez bluez-utils
 
 

@@ -11,7 +11,7 @@ then
 else # init
     echo "==> Init python environment"
     rm -rf venv
-    python3.6 -m venv venv
+    python3.7 -m venv venv
     source venv/bin/activate
     pip install --upgrade pip
     pip install -r requirements.txt
@@ -25,8 +25,8 @@ else # init
 
 
     echo "==> Running v4l2.py patchs ..."
-    cp ./script/patchs/v4l2.py.iotpatch ./venv/lib/python3.6/site-packages/
-    cd ./venv/lib/python3.6/site-packages/
+    cp ./script/patchs/v4l2.py.iotpatch ./venv/lib/python3.7/site-packages/
+    cd ./venv/lib/python3.7/site-packages/
     patch v4l2.py < v4l2.py.iotpatch
     cd -
     echo "==> Running http.py patchs ..."
