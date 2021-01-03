@@ -107,8 +107,11 @@ class Flash(Device):
         self.chroot(path=self.image_path, 
                     cmd ="chmod +x /root/Developer/rpi3-arch/remoted-scripts/setup.sh")
 
+        # corromp kernel
+        """ 
         self.chroot(path=self.image_path, 
                     cmd ="/root/Developer/rpi3-arch/remoted-scripts/setup.sh")
+        """
 
 
 
