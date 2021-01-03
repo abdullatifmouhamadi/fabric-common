@@ -2,7 +2,7 @@ setuptools
 wheel
 libsass
 #phonenumbers
-#psycopg2-binary
+psycopg2-binary
 #pysftp
 #dropbox
 #tqdm
