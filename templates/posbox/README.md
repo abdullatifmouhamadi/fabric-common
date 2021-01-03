@@ -1,6 +1,6 @@
 # required
 
-sudo pacman -S unzip postgresql
+sudo pacman -S unzip postgresql python-lxml python-gevent
 sudo pacman -S cups dbus ipp-usb python-gobject gobject-introspection bluez bluez-utils
 
 
