@@ -31,19 +31,27 @@ class Flash(Device):
         
         self.base_config()
         self.install_essential()
-        self.install_xfce4()
-        #self.install_lxqt() # ne fonctionne pas
+        ##self.install_xfce4() # ne fonctionne pas -> trop de bugs
+        self.install_lxqt()
+        self.install_posboxless_pkg()
 
         self.common_config()
         
         
  
-        self.post_build(path=self.image_path, name=self.image_name)
+        #self.post_build(path=self.image_path, name=self.image_name)
+
+    def install_posboxless_pkg(self):
+        self.chroot(path=self.image_path, 
+                    cmd ="pacman -Suy --noconfirm --needed \
+                          unzip postgresql python-lxml python-gevent libsass \
+                          cups dbus ipp-usb python-gobject gobject-introspection bluez bluez-utils \
+                         ")
 
     def install_lxqt(self):
         self.chroot(path=self.image_path, 
                     cmd ="pacman -Suy --noconfirm --needed \
-                          lxqt breeze-icons oxygen-icons\
+                          lxqt breeze-icons\
                          ")
 
     def install_xfce4(self):
@@ -62,8 +70,9 @@ class Flash(Device):
                           networkmanager network-manager-applet \
                           xorg-{server,xinit} xf86-input-libinput xdg-user-dirs \
                           ttf-{bitstream-vera,liberation,dejavu} freetype2 \
-                          xf86-video-vesa \
-                          chromium firefox firefox-i18n-fr \
+                          xf86-video-vesa xf86-video-fbdev\
+                          chromium firefox firefox-i18n-fr\
+                          vlc system-config-printer rsync \
                          ")
         # sddm
         self.chroot(path=self.image_path, 
@@ -83,18 +92,23 @@ class Flash(Device):
     def common_config(self):
 
         self.chroot(path=self.image_path, 
-                    cmd ="mkdir -p ~/Developer")
+                    cmd ="mkdir -p /root/Developer")
 
         r = sshpass("-p", self.ssh_pass, "rsync","-avz", "./fabric_common/templates/rpi3-arch", 'deploy@{}:~/Developer'.format(self.ssh_host)  )
         logi(title="envoie template",msg=r)
 
-        self.bash.sudo("cp -r ~/Developer/rpi3-arch {}/mnt/home/deploy/Developer || /bin/true".format(self.image_path))
+        self.bash.sudo("cp -r ~/Developer/rpi3-arch {}/mnt/root/Developer || /bin/true".format(self.image_path))
+
 
         self.chroot(path=self.image_path, 
-                    cmd ="chmod +x ~/Developer/rpi3-arch/setup.sh")
+            cmd ="cp -a /root/Developer/rpi3-arch/etc/. /etc/")
+
 
         self.chroot(path=self.image_path, 
-                    cmd ="~/Developer/rpi3-arch/setup.sh")
+                    cmd ="chmod +x /root/Developer/rpi3-arch/remoted-scripts/setup.sh")
+
+        self.chroot(path=self.image_path, 
+                    cmd ="/root/Developer/rpi3-arch/remoted-scripts/setup.sh")
 
 
 

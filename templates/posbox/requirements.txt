@@ -1,6 +1,6 @@
 setuptools
 wheel
-libsass
+#libsass
 #phonenumbers
 psycopg2-binary
 #pysftp
