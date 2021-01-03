@@ -39,7 +39,7 @@ class Flash(Device):
         
         
  
-        #self.post_build(path=self.image_path, name=self.image_name)
+        self.post_build(path=self.image_path, name=self.image_name)
 
     def install_posboxless_pkg(self):
         self.chroot(path=self.image_path, 
