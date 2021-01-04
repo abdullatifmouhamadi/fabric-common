@@ -12,3 +12,19 @@ bluetoothctl power on
 
 https://wiki.archlinux.org/index.php/Bluetooth
 
+
+
+# defaults
+
+useradd -m -g users -s /bin/bash pi
+
+
+
+
+groupadd usbusers
+usermod -a -G usbusers pi
+usermod -a -G lp pi # cups
+
+
+sudo -u postgres createuser -s deploy
+
