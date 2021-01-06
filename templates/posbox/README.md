@@ -28,3 +28,4 @@ usermod -a -G lp pi # cups
 
 sudo -u postgres createuser -s deploy
 
+yay -S raspberrypi-userland-aarch64-git xf86-video-fbturbo-git
