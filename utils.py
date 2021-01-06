@@ -7,19 +7,19 @@ import psycopg2
 FAKE_NOT_USED_LOCAL_PORT = 5433
 
 class ConnectionManager:
-    def __init__(self, stage):
-        self.stage = stage
+    def __init__(self, cluster):
+        self.cluster  = cluster
 
         # Autentication
-        self.sudo_pass = 'Houda2016'#getpass.getpass("What's your sudo password?")
+        self.sudo_pass = self.cluster.get('password')#getpass.getpass("What's your sudo password?")
         self.config = Config(overrides={'sudo': {'password': self.sudo_pass}})
 
         self.cnx = None
 
     def connect(self):
         if (self.cnx == None):
-            self.cnx = Connection( host=self.stage['host'], 
-                                   user=self.stage['user'],
+            self.cnx = Connection( host=self.cluster['host'], 
+                                   user=self.cluster['login'],
                                    connect_kwargs = {
                                         "password":self.sudo_pass
                                    },

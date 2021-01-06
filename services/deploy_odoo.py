@@ -131,6 +131,8 @@ class Odoo(DeployPython):
         # systemd
         self.config_systemd_template()
 
+        # desactivé
+        """ 
         # nginx
         self.config_nginx_template()
 
@@ -139,7 +141,7 @@ class Odoo(DeployPython):
 
         if self.rc.file_exists(pattern = self.certbot_fullchain):
             self.enable_nginx_ssl()
-        
+        """
 
 
         self.post_deploy()

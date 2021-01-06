@@ -8,6 +8,7 @@ class OdooInstances(DeployPython):
 
     def __init__(self, app_name, stage_name, params):
 
+        params['cluster'] = ODOO_INSTANCE_STAGES[params.get('instance')][stage_name]['cluster']
         DeployPython.__init__(self, 
                             app_stage = APP_STAGES[app_name][stage_name], 
                             app_name = app_name,

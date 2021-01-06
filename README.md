@@ -18,3 +18,5 @@ pacman -S git base-devel go screenfetch nginx certbot
 
 ```
 
+# VPS minimum
+sudo pacman -S python-psycopg2

@@ -1,5 +1,6 @@
 from fabric_common.utils import ConnectionManager
 from settings import APPS, PROJECT_CREDENTIALS
+from clusters import CLUSTERS
 from fabric import Remote
 
 from patchwork.files import directory, exists
@@ -14,9 +15,10 @@ class Deployable:
         self.params       = params
         self.project_key  = self.app['projectkey']
         self.credentials  = PROJECT_CREDENTIALS[self.project_key]
+        self.cluster      = CLUSTERS[params.get('cluster')]
 
 
-        self.manager = ConnectionManager(stage = self.stage)
+        self.manager = ConnectionManager(cluster = self.cluster)
 
         self.cnx = self.manager.connect()
         self.rc = RemoteCommand(conn = self.cnx)
