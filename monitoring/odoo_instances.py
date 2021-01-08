@@ -1,4 +1,4 @@
-from settings import APPS, APP_STAGES
+from settings import APPS, APP_STAGES, APP_SAAS_ODOO12_KEY, APP_MAOREDEV_BUSINESS_KEY
 from fabric_common.common.deploy_python import DeployPython
 from odoo.instances import ODOO_INSTANCE_STAGES
 
@@ -16,7 +16,21 @@ class OdooInstances(DeployPython):
 
 
         self.instance        = params.get('instance')
-        self.instance_dbname = self.instance+'_'+stage_name
+
+
+
+        #self.instance_dbname = self.instance+'_'+stage_name
+
+        if self.app['name'] == APP_SAAS_ODOO12_KEY:
+            self.odoo_version       = '12.0'
+            self.instance_dbname = self.instance+'_'+stage_name+'_v12'
+
+        elif self.app['name'] == APP_MAOREDEV_BUSINESS_KEY: # deprecated
+            self.odoo_version       = '13.0'
+            self.instance_dbname = self.instance+'_'+stage_name
+
+
+
         self.ODOO_PORT 	     = self.port
         self.ODOO_CHAT_PORT  = str(int(self.port) + 1)
 
