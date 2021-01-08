@@ -1,4 +1,4 @@
-from settings import APPS, APP_STAGES
+from settings import APPS, APP_STAGES, APP_SAAS_ODOO12_KEY, APP_MAOREDEV_BUSINESS_KEY
 from fabric_common.common.deploy_python import DeployPython
 
 class Odoo(DeployPython):
@@ -8,6 +8,19 @@ class Odoo(DeployPython):
                             app_stage = APP_STAGES[app_name][stage_name], 
                             app_name = app_name,
                             params = params)
+
+
+
+        if self.app['name'] == APP_SAAS_ODOO12_KEY:
+            self.odoo_version       = '12.0'
+            self.TEMPLATE_DB_FILTER = '_'+self.stage['name']+'_v12'
+
+        elif self.app['name'] == APP_MAOREDEV_BUSINESS_KEY: # deprecated
+            self.odoo_version       = '13.0'
+            self.TEMPLATE_DB_FILTER = '_'+self.stage['name']
+
+
+
 
         self.ODOO_PORT 	    = self.port
         self.ODOO_CHAT_PORT = str(int(self.port) + 1)
@@ -94,12 +107,15 @@ class Odoo(DeployPython):
         print("\n\n==> setup_database\n\n")
         TEMPLATE_ROLE_NAME        = self.pgdb_username
         TEMPLATE_LONGPOLLING_PORT = self.ODOO_CHAT_PORT
-        TEAMPLATE_DB_FILTER       = '_'+self.stage['name']
+
+
+
+        #TEMPLATE_DB_FILTER       = '_'+self.stage['name']
         #print(TEMPLATE_ROLE_NAME)
 
         self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEMPLATE_ROLE_NAME', TEMPLATE_ROLE_NAME)
         self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEMPLATE_LONGPOLLING_PORT', TEMPLATE_LONGPOLLING_PORT)
-        self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEAMPLATE_DB_FILTER', TEAMPLATE_DB_FILTER)
+        self.rc.sed(self.appDir + '/deploy/odoo.conf', 'TEMPLATE_DB_FILTER', self.TEMPLATE_DB_FILTER)
         self.rc.sed(self.appDir + '/script/setup.py', 'TEMPLATE_ROLE_NAME', TEMPLATE_ROLE_NAME)
         
 
