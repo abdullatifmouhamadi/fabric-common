@@ -1,4 +1,4 @@
-from settings import APPS, APP_STAGES, APP_SAAS_ODOO12_KEY, APP_MAOREDEV_BUSINESS_KEY
+from settings import APPS, APP_STAGES, APP_SAAS_ODOO12_KEY, APP_SAAS_ODOO13_KEY, APP_SAAS_ODOO14_KEY, APP_MAOREDEV_BUSINESS_KEY
 from fabric_common.common.deploy_python import DeployPython
 
 class Odoo(DeployPython):
@@ -14,6 +14,14 @@ class Odoo(DeployPython):
         if self.app['name'] == APP_SAAS_ODOO12_KEY:
             self.odoo_version       = '12.0'
             self.TEMPLATE_DB_FILTER = '_'+self.stage['name']+'_v12'
+
+        elif self.app['name'] == APP_SAAS_ODOO13_KEY:
+            self.odoo_version       = '13.0'
+            self.TEMPLATE_DB_FILTER = '_'+self.stage['name']+'_v13'
+
+        elif self.app['name'] == APP_SAAS_ODOO14_KEY:
+            self.odoo_version       = '14.0'
+            self.TEMPLATE_DB_FILTER = '_'+self.stage['name']+'_v14'
 
         elif self.app['name'] == APP_MAOREDEV_BUSINESS_KEY: # deprecated
             self.odoo_version       = '13.0'
