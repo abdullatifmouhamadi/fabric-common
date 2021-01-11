@@ -20,6 +20,7 @@ class IotBox(DeployPython):
                             app_stage = APP_STAGES[app_name][stage_name], 
                             app_name = app_name,
                             params = params)
+
         """
 
         """
@@ -28,9 +29,9 @@ class IotBox(DeployPython):
         self.rc.chmod(permissions = "777", pattern=ODOOD_PATH)
 
         self.params = params
-        self.host   = params.get('host')
-        self.ssh_login  = params.get('user')
-        self.ssh_passwd = params.get('password')
+        self.host   = self.cluster.get('host')#params.get('host')
+        self.ssh_login  = self.cluster.get('login')#params.get('user')
+        self.ssh_passwd = self.cluster.get('password')#params.get('password')
 
     def setup_postgresql(self):
         self.db.create_role(role = self.ssh_login)
