@@ -29,10 +29,10 @@ else # init
     cd ./venv/lib/python3.7/site-packages/
     patch v4l2.py < v4l2.py.iotpatch
     cd -
-    echo "==> Running http.py patchs ..."
-    cp ./script/patchs/http.py.iotpatch ./odoo_src/odoo
-    cd ./odoo_src/odoo
-    patch http.py < http.py.iotpatch
+    #echo "==> Running http.py patchs ..."
+    #cp ./script/patchs/http.py.iotpatch ./odoo_src/odoo
+    #cd ./odoo_src/odoo
+    #patch http.py < http.py.iotpatch
     
 
 fi
