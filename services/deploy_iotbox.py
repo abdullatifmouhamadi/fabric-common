@@ -21,6 +21,8 @@ class IotBox(DeployPython):
                             app_name = app_name,
                             params = params)
 
+
+        self.ODOO_POS_VERSION = "14.0"
         """
 
         """
@@ -50,12 +52,12 @@ class IotBox(DeployPython):
 
 
         if not exists(self.cnx, self.appDir + '/odoo_src'):
-            path_release = _pull_release(release = '13.0')
+            path_release = _pull_release(release = self.ODOO_POS_VERSION)
 
             r = sshpass("-p", self.ssh_passwd, "rsync","-avz", path_release, 'deploy@{}:{}'.format(self.host, self.appDir)  )
             logi(title="envoie via ssh de l'instance des sources odoo",msg=r)
 
-            self.cnx.run('cd {} && unzip 13.0.zip && mkdir odoo_src && mv odoo-13.0/* odoo_src && rm -rf odoo-13.0 && rm 13.0.zip'.format(self.appDir))
+            self.cnx.run('cd {} && unzip {}.zip && mkdir odoo_src && mv odoo-{}/* odoo_src && rm -rf odoo-{} && rm {}.zip'.format(self.appDir, self.ODOO_POS_VERSION, self.ODOO_POS_VERSION, self.ODOO_POS_VERSION, self.ODOO_POS_VERSION))
 
 
 
