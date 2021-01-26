@@ -3,6 +3,8 @@
 sudo pacman -S unzip postgresql python-lxml python-gevent libsass
 sudo pacman -S cups dbus ipp-usb python-gobject gobject-introspection bluez bluez-utils
 
+sudo pacman -S net-tools
+
 
 systemctl start cups
 systemctl start bluetooth
@@ -28,5 +30,15 @@ usermod -a -G lp pi # cups
 
 sudo -u postgres createuser -s deploy
 
-yay -S raspberrypi-userland-aarch64-git xf86-video-fbturbo-git
+
+
 yay -S xorg-xhost
+
+
+
+
+# pour systeme raspberry pi
+
+yay -S raspberrypi-userland-aarch64-git xf86-video-fbturbo-git
+
+
