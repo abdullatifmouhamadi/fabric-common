@@ -42,3 +42,14 @@ yay -S xorg-xhost
 yay -S raspberrypi-userland-aarch64-git xf86-video-fbturbo-git
 
 
+## utilisation des screens
+
+xrandr
+xrandr --listmonitors
+
+DISPLAY=:0.0 urxvt & 
+
+wmctrl 
+
+
+# https://qastack.fr/ubuntu/663187/how-can-i-run-a-program-on-startup-minimized
